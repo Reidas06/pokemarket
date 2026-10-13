@@ -22,7 +22,9 @@ export default function App() {
       <StatusBar style="dark" />
 
       {cartaSeleccionada === null ? (
-        <CatalogScreen />
+        <CatalogScreen
+          alSeleccionarCarta={(carta) => setCartaSeleccionada(carta)}
+        />
       ) : (
         <CardDetailScreen
           carta={cartaSeleccionada}

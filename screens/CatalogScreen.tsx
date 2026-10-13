@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TextInput, View, } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
 
 import cartas from '../data/cartas.json';
 
@@ -14,7 +14,11 @@ type Carta = {
     imagen: string;
 };
 
-export default function CatalogScreen() {
+type Props = {
+    alSeleccionarCarta: (carta: Carta) => void;
+};
+
+export default function CatalogScreen({ alSeleccionarCarta }: Props) {
     const [busqueda, setBusqueda] = useState('');
 
     const cartasFiltradas = (cartas as Carta[]).filter((carta) =>
@@ -44,7 +48,7 @@ export default function CatalogScreen() {
 
                 <ScrollView contentContainerStyle={styles.lista}>
                     {cartasFiltradas.map((carta) => (
-                        <View key={carta.id} style={styles.tarjeta}>
+                        <Pressable key={carta.id} style={styles.tarjeta} onPress={() => alSeleccionarCarta(carta)}>
                             <Image
                                 source={{ uri: carta.imagen }}
                                 style={styles.imagen}
@@ -61,7 +65,7 @@ export default function CatalogScreen() {
                             <Text style={styles.precio}>
                                 {carta.precio.toFixed(2)} €
                             </Text>
-                        </View>
+                        </Pressable>
                     ))}
 
                     {cartasFiltradas.length === 0 && (
