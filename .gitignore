@@ -74,3 +74,7 @@ Thumbs.db
 pokemarket-temp/
 README.backup.md
 .gitignore.backup
+
+# Files not used in the current project
+AGENTS.md
+LICENSE
