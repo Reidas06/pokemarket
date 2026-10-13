@@ -1,4 +1,5 @@
 import { Pressable, Text, View, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 type Pantalla = 'Inicio' | 'Colección' | 'Carrito' | 'Cuenta';
 
@@ -21,6 +22,20 @@ export default function BottomBar({
                         style={styles.boton}
                         onPress={() => alCambiarPantalla(pantalla)}
                     >
+                        <Ionicons
+                            name={
+                                pantalla === 'Inicio'
+                                    ? 'home-outline'
+                                    : pantalla === 'Colección'
+                                        ? 'wallet-outline'
+                                        : pantalla === 'Carrito'
+                                            ? 'cart-outline'
+                                            : 'person-outline'
+                            }
+                            size={24}
+                            color={pantallaActual === pantalla ? 'red' : 'black'}
+                        />
+
                         <Text
                             style={[
                                 styles.textoBoton,
