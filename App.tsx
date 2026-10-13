@@ -1,8 +1,12 @@
 
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { View } from 'react-native';
 import CatalogScreen from './screens/CatalogScreen';
 import CardDetailScreen from './screens/CardDetailScreen';
+import BottomBar from './components/BottomBar';
+
+type Pantalla = 'Inicio' | 'Colección' | 'Carrito' | 'Cuenta';
 
 type Carta = {
   id: string;
@@ -17,6 +21,8 @@ type Carta = {
 export default function App() {
 
   const [cartaSeleccionada, setCartaSeleccionada] = useState<Carta | null>(null);
+  const [pantallaActual, setPantallaActual] = useState<Pantalla>('Inicio');
+
   return (
     <>
       <StatusBar style="dark" />
@@ -31,6 +37,13 @@ export default function App() {
           volver={() => setCartaSeleccionada(null)}
         />
       )}
+
+      <View>
+        <BottomBar
+          pantallaActual={pantallaActual}
+          alCambiarPantalla={setPantallaActual}
+        />
+      </View>
     </>
   );
 }
