@@ -1,0 +1,29 @@
+[
+    {
+        "id": "carta-1",
+        "nombre": "Charizard",
+        "precio": 25,
+        "descripcion": "Carta Pokémon de tipo Fuego.",
+        "expansion": "Base",
+        "numero": "4",
+        "imagen": "https://images.pokemontcg.io/base1/4.png"
+    },
+    {
+        "id": "carta-2",
+        "nombre": "Blastoise",
+        "precio": 18,
+        "descripcion": "Carta Pokémon de tipo Agua.",
+        "expansion": "Base",
+        "numero": "2",
+        "imagen": "https://images.pokemontcg.io/base1/2.png"
+    },
+    {
+        "id": "carta-3",
+        "nombre": "Venusaur",
+        "precio": 16,
+        "descripcion": "Carta Pokémon de tipo Planta.",
+        "expansion": "Base",
+        "numero": "15",
+        "imagen": "https://images.pokemontcg.io/base1/15.png"
+    }
+]

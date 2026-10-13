@@ -1,94 +1,161 @@
 
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Image, ScrollView, StyleSheet, Text, TextInput, View, } from 'react-native';
+
+import cartas from './data/cartas.json';
+
+type Carta = {
+  id: string;
+  nombre: string;
+  precio: number;
+  descripcion: string;
+  expansion: string;
+  numero: string;
+  imagen: string;
+};
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <StatusBar style="dark" />
+  const [busqueda, setBusqueda] = useState('');
 
-      <View style={styles.header}>
+  const cartasFiltradas = (cartas as Carta[]).filter((carta) =>
+    carta.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+    carta.descripcion.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
+  return (
+    <View style={styles.contenedor}>
+      <View style={styles.cabecera}>
         <Text style={styles.logo}>POKÉMARKET</Text>
-        <Text style={styles.subtitle}>Tu colección, a otro nivel</Text>
+        <Text style={styles.subtitulo}>Tu colección Pokémon</Text>
       </View>
 
-      <View style={styles.content}>
-        <Text style={styles.title}>Cartas Pokémon</Text>
-
-        <Text style={styles.description}>
-          Descubre cartas, explora expansiones y encuentra tu próxima favorita.
+      <View style={styles.contenido}>
+        <Text style={styles.titulo}>Cartas Pokémon</Text>
+        <Text style={styles.descripcion}>
+          Descubre cartas y encuentra tu próxima favorita.
         </Text>
 
-        <View style={styles.catalog}>
-          <Text style={styles.catalogTitle}>
-            Próximamente en el catálogo
-          </Text>
+        <TextInput
+          style={styles.busqueda}
+          placeholder="Buscar cartas..."
+          value={busqueda}
+          onChangeText={setBusqueda}
+        />
 
-          <Text style={styles.catalogDescription}>
-            Aquí encontrarás las cartas disponibles y podrás consultar sus
-            detalles.
-          </Text>
-        </View>
+        <ScrollView contentContainerStyle={styles.lista}>
+          {cartasFiltradas.map((carta) => (
+            <View key={carta.id} style={styles.tarjeta}>
+              <Image
+                source={{ uri: carta.imagen }}
+                style={styles.imagen}
+                resizeMode="contain"
+              />
+
+              <Text style={styles.nombre}>{carta.nombre}</Text>
+              <Text style={styles.detalle}>
+                Expansión: {carta.expansion}
+              </Text>
+              <Text style={styles.detalle}>
+                Número: {carta.numero}
+              </Text>
+              <Text style={styles.precio}>
+                {carta.precio.toFixed(2)} €
+              </Text>
+            </View>
+          ))}
+
+          {cartasFiltradas.length === 0 && (
+            <Text style={styles.sinResultados}>
+              No se han encontrado cartas.
+            </Text>
+          )}
+        </ScrollView>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  contenedor: {
     flex: 1,
     backgroundColor: 'white',
   },
-  header: {
-    backgroundColor: '#ec3535ff',
-    paddingTop: 64,
-    paddingHorizontal: 24,
-    paddingBottom: 28,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+  cabecera: {
+    backgroundColor: 'red',
+    paddingTop: 55,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   logo: {
     color: 'white',
-    fontSize: 28,
-    fontWeight: '900',
-    letterSpacing: 1,
+    fontSize: 26,
+    fontWeight: 'bold',
   },
-  subtitle: {
-    color: 'black',
-    fontSize: 15,
-    marginTop: 6,
-  },
-  content: {
-    padding: 24,
-  },
-  title: {
-    color: 'black',
-    fontSize: 24,
-    fontWeight: '800',
-  },
-  description: {
-    color: 'black',
-    fontSize: 15,
-    lineHeight: 22,
-    marginTop: 8,
-  },
-  catalog: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 16,
-    marginTop: 24,
-    borderWidth: 1,
-    borderColor: '#c13131ff',
-  },
-  catalogTitle: {
-    color: '#c13131ff',
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  catalogDescription: {
+  subtitulo: {
     color: 'black',
     fontSize: 14,
-    lineHeight: 21,
-    marginTop: 8,
+    marginTop: 4,
+  },
+  contenido: {
+    flex: 1,
+    padding: 20,
+  },
+  titulo: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  descripcion: {
+    fontSize: 14,
+    color: 'black',
+    marginTop: 6,
+    marginBottom: 16,
+  },
+  busqueda: {
+    borderWidth: 1,
+    borderColor: 'red',
+    borderRadius: 24,
+    padding: 12,
+    marginBottom: 16,
+    color: 'black',
+  },
+  lista: {
+    paddingBottom: 30,
+  },
+  tarjeta: {
+    borderWidth: 1,
+    borderColor: 'red',
+    borderRadius: 24,
+    padding: 16,
+    marginBottom: 16,
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  imagen: {
+    width: 180,
+    height: 230,
+  },
+  nombre: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+    marginTop: 10,
+  },
+  detalle: {
+    fontSize: 14,
+    color: 'black',
+    marginTop: 4,
+  },
+  precio: {
+    color: 'red',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  sinResultados: {
+    textAlign: 'center',
+    color: 'black',
+    padding: 20,
   },
 });
+
