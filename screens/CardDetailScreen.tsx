@@ -20,10 +20,6 @@ export default function CardDetailScreen({ carta, volver }: Props) {
     return (
         <View style={styles.contenedor}>
             <View style={styles.cabecera}>
-                <Pressable onPress={volver} style={styles.botonVolver}>
-                    <Text style={styles.textoVolver}>‹ Volver al catálogo</Text>
-                </Pressable>
-
                 <Text style={styles.logo}>POKÉMARKET</Text>
             </View>
 
@@ -50,6 +46,10 @@ export default function CardDetailScreen({ carta, volver }: Props) {
                     <Text style={styles.valor}>{carta.numero}</Text>
                 </View>
             </ScrollView>
+
+            <Pressable onPress={volver} style={styles.botonVolver}>
+                <Text style={styles.textoVolver}>‹ Volver al catálogo</Text>
+            </Pressable>
         </View>
     );
 }
@@ -66,13 +66,15 @@ const styles = StyleSheet.create({
         paddingBottom: 18,
     },
     botonVolver: {
-        alignSelf: 'flex-start',
-        paddingVertical: 8,
-        marginBottom: 8,
+        backgroundColor: 'red',
+        paddingVertical: 16,
+        paddingHorizontal: 20,
+        alignItems: 'center',
     },
     textoVolver: {
         color: 'white',
         fontSize: 16,
+        fontWeight: 'bold',
     },
     logo: {
         color: 'white',
