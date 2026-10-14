@@ -25,6 +25,7 @@ export default function App() {
 
   const [cartaSeleccionada, setCartaSeleccionada] = useState<Carta | null>(null);
   const [pantallaActual, setPantallaActual] = useState<Pantalla>('Inicio');
+  const [carrito, setCarrito] = useState<Carta[]>([]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -41,6 +42,9 @@ export default function App() {
           <CardDetailScreen
             carta={cartaSeleccionada}
             volver={() => setCartaSeleccionada(null)}
+            alAñadirCarrito={(carta) => {
+              setCarrito((carritoActual) => [...carritoActual, carta]);
+            }}
           />
         )}
       </View>

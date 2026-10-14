@@ -14,9 +14,10 @@ type Carta = {
 type Props = {
     carta: Carta;
     volver: () => void;
+    alAñadirCarrito: (carta: Carta) => void;
 };
 
-export default function CardDetailScreen({ carta, volver }: Props) {
+export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Props) {
     return (
         <View style={styles.contenedor}>
             <View style={styles.cabecera}>
@@ -45,6 +46,15 @@ export default function CardDetailScreen({ carta, volver }: Props) {
                     <Text style={styles.etiqueta}>Número de colección</Text>
                     <Text style={styles.valor}>{carta.numero}</Text>
                 </View>
+
+                <Pressable
+                    onPress={() => alAñadirCarrito(carta)}
+                    style={styles.botonCarrito}>
+                    <Text style={styles.textoBotonCarrito}>
+                        Añadir al carrito
+                    </Text>
+                </Pressable>
+
             </ScrollView>
 
             <Pressable onPress={volver} style={styles.botonVolver}>
@@ -126,5 +136,18 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontWeight: 'bold',
         marginTop: 3,
+    },
+    botonCarrito: {
+        backgroundColor: 'black',
+        paddingVertical: 16,
+        paddingHorizontal: 20,
+        alignItems: 'center',
+        marginTop: 40,
+        borderRadius: 10,
+    },
+    textoBotonCarrito: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
