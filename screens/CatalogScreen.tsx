@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     },
     cabecera: {
         backgroundColor: 'red',
-        paddingTop: 55,
+        paddingTop: 24,
         paddingBottom: 20,
         paddingHorizontal: 20,
     },

@@ -56,9 +56,6 @@ const styles = StyleSheet.create({
     barra: {
         flexDirection: 'row',
         backgroundColor: 'white',
-        borderTopWidth: 1,
-        borderTopColor: '#dddddd',
-        paddingVertical: 12,
         justifyContent: 'space-around',
         alignItems: 'center',
     },
