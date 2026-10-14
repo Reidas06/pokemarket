@@ -61,14 +61,13 @@ const styles = StyleSheet.create({
     },
     cabecera: {
         backgroundColor: 'red',
-        paddingTop: 55,
+        paddingTop: 25,
         paddingHorizontal: 20,
         paddingBottom: 18,
     },
     botonVolver: {
         backgroundColor: 'red',
-        paddingVertical: 16,
-        paddingHorizontal: 20,
+        paddingVertical: 15,
         alignItems: 'center',
     },
     textoVolver: {
@@ -87,19 +86,19 @@ const styles = StyleSheet.create({
         paddingBottom: 35,
     },
     imagen: {
-        width: 250,
-        height: 330,
+        width: 200,
+        height: 280,
     },
     nombre: {
         color: 'black',
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: 'bold',
         marginTop: 16,
         textAlign: 'center',
     },
     precio: {
         color: 'red',
-        fontSize: 25,
+        fontSize: 22,
         fontWeight: 'bold',
         marginTop: 10,
     },
