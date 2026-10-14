@@ -5,7 +5,9 @@ import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CatalogScreen from './screens/CatalogScreen';
 import CardDetailScreen from './screens/CardDetailScreen';
+import CartScreen from './screens/CartScreen';
 import BottomBar from './components/BottomBar';
+
 
 type Pantalla = 'Inicio' | 'Colección' | 'Carrito' | 'Cuenta';
 
@@ -29,7 +31,9 @@ export default function App() {
       <StatusBar style="dark" />
 
       <View style={{ flex: 1 }}>
-        {cartaSeleccionada === null ? (
+        {pantallaActual === 'Carrito' ? (
+          <CartScreen />
+        ) : cartaSeleccionada === null ? (
           <CatalogScreen
             alSeleccionarCarta={(carta) => setCartaSeleccionada(carta)}
           />
