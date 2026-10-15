@@ -40,7 +40,7 @@ export default function CartScreen({ carrito }: Props) {
                     </Text>
                 </View>
             ) : (
-                <ScrollView contentContainerStyle={styles.contenido}>
+                <ScrollView contentContainerStyle={styles.listaCarrito}>
                     {carrito.map((carta, indice) => (
                         <View key={`${carta.id}-${indice}`} style={styles.itemCarta}>
                             <Image
@@ -143,6 +143,11 @@ const styles = StyleSheet.create({
     detalleCarta: {
         fontSize: 13,
         color: 'gray',
+    },
+
+    listaCarrito: {
+        padding: 16,
+        paddingBottom: 30,
     },
 
 });
