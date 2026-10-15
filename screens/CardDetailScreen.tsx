@@ -72,7 +72,9 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                 <Text style={styles.logo}>POKÉMARKET</Text>
             </View>
 
-            <ScrollView contentContainerStyle={styles.contenido}>
+            {/* ScrollIndicator en false para que no se vea la barra del scroll*/}
+            <ScrollView contentContainerStyle={styles.contenido} showsVerticalScrollIndicator={false}>
+                {/*Imagen de la carta*/}
                 <Image
                     source={{ uri: carta.imagen }}
                     style={styles.imagen}

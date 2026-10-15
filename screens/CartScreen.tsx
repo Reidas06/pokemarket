@@ -40,7 +40,9 @@ export default function CartScreen({ carrito }: Props) {
                     </Text>
                 </View>
             ) : (
-                <ScrollView contentContainerStyle={styles.listaCarrito}>
+                // ScrollIndicator en fals epara que no se vea la barra del scroll
+                <ScrollView contentContainerStyle={styles.listaCarrito} showsVerticalScrollIndicator={false}>
+                    {/*Bucle que recorre el array carrito*/}
                     {carrito.map((carta, indice) => (
                         <View key={`${carta.id}-${indice}`} style={styles.itemCarta}>
                             <Image

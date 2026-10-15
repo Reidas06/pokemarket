@@ -46,7 +46,9 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                     onChangeText={setBusqueda}
                 />
 
-                <ScrollView contentContainerStyle={styles.lista}>
+                {/* ScrollIndicator en false para que no se vea la barra del scroll*/}
+                <ScrollView contentContainerStyle={styles.lista} showsVerticalScrollIndicator={false}>
+                    {/*Bucle que recorre el array cartasFiltradas*/}
                     {cartasFiltradas.map((carta) => (
                         <Pressable key={carta.id} style={styles.tarjeta} onPress={() => alSeleccionarCarta(carta)}>
                             <Image
