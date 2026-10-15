@@ -33,7 +33,7 @@ export default function App() {
 
       <View style={{ flex: 1 }}>
         {pantallaActual === 'Carrito' ? (
-          <CartScreen />
+          <CartScreen carrito={carrito} />
         ) : cartaSeleccionada === null ? (
           <CatalogScreen
             alSeleccionarCarta={(carta) => setCartaSeleccionada(carta)}
