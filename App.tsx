@@ -26,6 +26,9 @@ export default function App() {
   const [cartaSeleccionada, setCartaSeleccionada] = useState<Carta | null>(null);
   const [pantallaActual, setPantallaActual] = useState<Pantalla>('Inicio');
   const [carrito, setCarrito] = useState<Carta[]>([]);
+  const eliminarCarta = (id: string) => {
+    setCarrito((carritoActual) => carritoActual.filter((carta) => carta.id !== id));
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -33,7 +36,9 @@ export default function App() {
 
       <View style={{ flex: 1 }}>
         {pantallaActual === 'Carrito' ? (
-          <CartScreen carrito={carrito} />
+          <CartScreen
+            carrito={carrito} alEliminarCarta={eliminarCarta}
+          />
         ) : cartaSeleccionada === null ? (
           <CatalogScreen
             alSeleccionarCarta={(carta) => setCartaSeleccionada(carta)}

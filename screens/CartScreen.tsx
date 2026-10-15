@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, Alert, Pressable } from "react-native";
 import Icon from '@expo/vector-icons/Ionicons';
 
 
@@ -13,10 +13,29 @@ type Carta = {
 };
 
 type Props = {
-    carrito: Carta[];
+    carrito: Carta[]
+    alEliminarCarta: (id: string) => void;
 };
 
-export default function CartScreen({ carrito }: Props) {
+export default function CartScreen({ carrito, alEliminarCarta }: Props) {
+
+    const confirmarEliminacion = (id: string, nombre: string) => {
+        Alert.alert(
+            `Eliminar carta`,
+            `¿Estas seguro de que quieres eliminar ${nombre}?`,
+            [
+                {
+                    text: 'Cancelar',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Eliminar',
+                    onPress: () => alEliminarCarta(id),
+                },
+            ]
+        );
+    }
+
 
     return (
         <View style={styles.contenedor}>
@@ -52,6 +71,13 @@ export default function CartScreen({ carrito }: Props) {
                             />
 
                             <View style={styles.infoCarta}>
+                                <Pressable
+                                    style={styles.botonEliminar}
+                                    onPress={() => confirmarEliminacion(carta.id, carta.nombre)}
+                                >
+                                    <Icon name="trash-outline" size={22} color="red" />
+                                </Pressable>
+
                                 <Text style={styles.nombreCarta}>
                                     {carta.nombre}
                                 </Text>
@@ -146,10 +172,17 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: 'gray',
     },
-
     listaCarrito: {
         padding: 16,
         paddingBottom: 30,
+    },
+    botonEliminar: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        padding: 8,
+        borderRadius: 8,
+        backgroundColor: '#FCE8E8',
     },
 
 });
