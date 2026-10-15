@@ -49,10 +49,18 @@ export default function App() {
         )}
       </View>
 
+
       <BottomBar
         pantallaActual={pantallaActual}
-        alCambiarPantalla={setPantallaActual}
+        alCambiarPantalla={(pantalla) => {
+          setPantallaActual(pantalla);
+
+          if (pantalla === 'Inicio') {
+            setCartaSeleccionada(null);
+          }
+        }}
       />
+
     </SafeAreaView>
   );
 
