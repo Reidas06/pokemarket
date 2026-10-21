@@ -19,8 +19,10 @@ type Props = {
 };
 
 export default function CatalogScreen({ alSeleccionarCarta }: Props) {
+    // Texto que escribe el usuario en el buscador
     const [busqueda, setBusqueda] = useState('');
 
+    // Filtra las cartas en tiempo real comparando por nombre o descripción (en minúsculas para ignorar mayúsculas)
     const cartasFiltradas = (cartas as Carta[]).filter((carta) =>
         carta.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
         carta.descripcion.toLowerCase().includes(busqueda.toLowerCase())

@@ -25,6 +25,7 @@ type ArticuloCarrito = {
 
 export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad }: Props) {
 
+    // Alerta nativa de confirmación para no borrar la carta por error
     const confirmarEliminacion = (id: string, nombre: string) => {
         Alert.alert(
             `Eliminar carta`,
@@ -50,11 +51,13 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                     Carrito <Icon name="cart-outline" size={24} color="white" />
                 </Text>
 
+                {/* Calculamos con reduce el total de unidades y el precio total acumulado */}
                 <Text style={styles.subtitulo}>
                     {carrito.reduce((total, articulo) => total + articulo.cantidad, 0)} artículos · {carrito.reduce((total, articulo) => total + articulo.carta.precio * articulo.cantidad, 0).toFixed(2).replace('.', ',')} €
                 </Text>
             </View>
 
+            {/* Si no hay cartas en el carrito enseñamos mensaje vacío, si hay mostramos la lista */}
             {carrito.length === 0 ? (
                 <View style={styles.contenido}>
                     <Text style={styles.mensaje}>
@@ -77,6 +80,7 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                             />
 
                             <View style={styles.infoCarta}>
+                                {/* Botón papelera para borrar la carta */}
                                 <Pressable
                                     style={styles.botonEliminar}
                                     onPress={() => confirmarEliminacion(articulo.carta.id, articulo.carta.nombre)}
@@ -96,6 +100,7 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                                     Expansión: {articulo.carta.expansion}
                                 </Text>
 
+                                {/* Botones para sumar o restar unidades de la carta */}
                                 <View style={styles.cantidadControles}>
                                     <Pressable
                                         style={[styles.botonCantidad, styles.botonMas]}

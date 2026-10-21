@@ -15,6 +15,7 @@ export default function BottomBar({
     return (
 
         <View style={styles.barra}>
+            {/* Recorremos las pestañas para crear cada botón de la barra */}
             {(['Inicio', 'Colección', 'Carrito', 'Cuenta'] as Pantalla[]).map(
                 (pantalla) => (
                     <Pressable
@@ -22,6 +23,7 @@ export default function BottomBar({
                         style={styles.boton}
                         onPress={() => alCambiarPantalla(pantalla)}
                     >
+                        {/* Icono dinámico según la pestaña y en rojo si es la seleccionada */}
                         <Ionicons
                             name={
                                 pantalla === 'Inicio'
