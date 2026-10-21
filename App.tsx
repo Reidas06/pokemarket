@@ -21,14 +21,36 @@ type Carta = {
   imagen: string;
 };
 
+type ArticuloCarrito = {
+  carta: Carta;
+  cantidad: number;
+};
+
 export default function App() {
 
   const [cartaSeleccionada, setCartaSeleccionada] = useState<Carta | null>(null);
   const [pantallaActual, setPantallaActual] = useState<Pantalla>('Inicio');
-  const [carrito, setCarrito] = useState<Carta[]>([]);
+  const [carrito, setCarrito] = useState<ArticuloCarrito[]>([]);
   const eliminarCarta = (id: string) => {
-    setCarrito((carritoActual) => carritoActual.filter((carta) => carta.id !== id));
+    setCarrito((carritoActual) => carritoActual.filter((articulo) => articulo.carta.id !== id));
   };
+
+
+  const cambiarCantidad = (id: string, cambio: number) => {
+    setCarrito((carritoActual) =>
+      carritoActual
+        .map((articulo) =>
+          articulo.carta.id === id
+            ? {
+              ...articulo,
+              cantidad: articulo.cantidad + cambio,
+            }
+            : articulo
+        )
+        .filter((articulo) => articulo.cantidad > 0)
+    );
+  };
+
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -37,7 +59,7 @@ export default function App() {
       <View style={{ flex: 1 }}>
         {pantallaActual === 'Carrito' ? (
           <CartScreen
-            carrito={carrito} alEliminarCarta={eliminarCarta}
+            carrito={carrito} alEliminarCarta={eliminarCarta} alCambiarCantidad={cambiarCantidad}
           />
         ) : cartaSeleccionada === null ? (
           <CatalogScreen
@@ -48,8 +70,23 @@ export default function App() {
             carta={cartaSeleccionada}
             volver={() => setCartaSeleccionada(null)}
             alAñadirCarrito={(carta) => {
-              setCarrito((carritoActual) => [...carritoActual, carta]);
+              setCarrito((carritoActual) => {
+                const articuloExistente = carritoActual.find(
+                  (articulo) => articulo.carta.id === carta.id
+                );
+
+                if (articuloExistente) {
+                  return carritoActual.map((articulo) =>
+                    articulo.carta.id === carta.id
+                      ? { ...articulo, cantidad: articulo.cantidad + 1 }
+                      : articulo
+                  );
+                }
+
+                return [...carritoActual, { carta, cantidad: 1 }];
+              });
             }}
+
           />
         )}
       </View>

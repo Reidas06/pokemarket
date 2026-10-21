@@ -13,11 +13,17 @@ type Carta = {
 };
 
 type Props = {
-    carrito: Carta[]
+    carrito: ArticuloCarrito[]
     alEliminarCarta: (id: string) => void;
+    alCambiarCantidad: (id: string, cambio: number) => void;
 };
 
-export default function CartScreen({ carrito, alEliminarCarta }: Props) {
+type ArticuloCarrito = {
+    carta: Carta;
+    cantidad: number;
+};
+
+export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad }: Props) {
 
     const confirmarEliminacion = (id: string, nombre: string) => {
         Alert.alert(
@@ -45,7 +51,7 @@ export default function CartScreen({ carrito, alEliminarCarta }: Props) {
                 </Text>
 
                 <Text style={styles.subtitulo}>
-                    {carrito.length} artículos · {carrito.reduce((total, carta) => total + carta.precio, 0).toFixed(2).replace('.', ',')} €
+                    {carrito.reduce((total, articulo) => total + articulo.cantidad, 0)} artículos · {carrito.reduce((total, articulo) => total + articulo.carta.precio * articulo.cantidad, 0).toFixed(2).replace('.', ',')} €
                 </Text>
             </View>
 
@@ -62,10 +68,10 @@ export default function CartScreen({ carrito, alEliminarCarta }: Props) {
                 // ScrollIndicator en fals epara que no se vea la barra del scroll
                 <ScrollView contentContainerStyle={styles.listaCarrito} showsVerticalScrollIndicator={false}>
                     {/*Bucle que recorre el array carrito*/}
-                    {carrito.map((carta, indice) => (
-                        <View key={`${carta.id}-${indice}`} style={styles.itemCarta}>
+                    {carrito.map((articulo, indice) => (
+                        <View key={`${articulo.carta.id}-${indice}`} style={styles.itemCarta}>
                             <Image
-                                source={{ uri: carta.imagen }}
+                                source={{ uri: articulo.carta.imagen }}
                                 style={styles.imagenCarta}
                                 resizeMode="contain"
                             />
@@ -73,21 +79,21 @@ export default function CartScreen({ carrito, alEliminarCarta }: Props) {
                             <View style={styles.infoCarta}>
                                 <Pressable
                                     style={styles.botonEliminar}
-                                    onPress={() => confirmarEliminacion(carta.id, carta.nombre)}
+                                    onPress={() => confirmarEliminacion(articulo.carta.id, articulo.carta.nombre)}
                                 >
                                     <Icon name="trash-outline" size={22} color="red" />
                                 </Pressable>
 
                                 <Text style={styles.nombreCarta}>
-                                    {carta.nombre}
+                                    {articulo.carta.nombre}
                                 </Text>
 
                                 <Text style={styles.precioCarta}>
-                                    {carta.precio.toFixed(2).replace('.', ',')} €
+                                    {articulo.carta.precio.toFixed(2).replace('.', ',')} €
                                 </Text>
 
                                 <Text style={styles.detalleCarta}>
-                                    Expansión: {carta.expansion}
+                                    Expansión: {articulo.carta.expansion}
                                 </Text>
                             </View>
                         </View>
