@@ -45,16 +45,15 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                     useNativeDriver: true,
                 }),
             ]),
-            Animated.delay(1600),
+            Animated.delay(400),
             Animated.parallel([
                 Animated.timing(escala, {
                     toValue: 0.85,
-                    duration: 180,
+                    duration: 120,
                     useNativeDriver: true,
-                }),
-                Animated.timing(opacidad, {
+                }), Animated.timing(opacidad, {
                     toValue: 0,
-                    duration: 180,
+                    duration: 120,
                     useNativeDriver: true,
                 }),
             ]),
