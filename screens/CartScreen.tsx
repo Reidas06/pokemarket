@@ -65,7 +65,7 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                     </Text>
                 </View>
             ) : (
-                // ScrollIndicator en fals epara que no se vea la barra del scroll
+                // ScrollIndicator en false para que no se vea la barra del scroll
                 <ScrollView contentContainerStyle={styles.listaCarrito} showsVerticalScrollIndicator={false}>
                     {/*Bucle que recorre el array carrito*/}
                     {carrito.map((articulo, indice) => (
@@ -95,6 +95,25 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                                 <Text style={styles.detalleCarta}>
                                     Expansión: {articulo.carta.expansion}
                                 </Text>
+
+                                <View style={styles.cantidadControles}>
+                                    <Pressable
+                                        style={[styles.botonCantidad, styles.botonMas]}
+                                        onPress={() => alCambiarCantidad(articulo.carta.id, 1)}
+                                    >
+                                        <Text style={styles.textoCantidad}>+</Text>
+                                    </Pressable>
+
+                                    <Text style={styles.numeroCantidad}>{articulo.cantidad}</Text>
+
+                                    <Pressable
+                                        style={[styles.botonCantidad, styles.botonMenos]}
+                                        onPress={() => alCambiarCantidad(articulo.carta.id, -1)}
+                                    >
+                                        <Text style={styles.textoCantidad}>−</Text>
+                                    </Pressable>
+                                </View>
+
                             </View>
                         </View>
                     ))}
@@ -189,6 +208,43 @@ const styles = StyleSheet.create({
         padding: 8,
         borderRadius: 8,
         backgroundColor: '#FCE8E8',
+    },
+
+    cantidadControles: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+        gap: 12,
+    },
+
+    botonCantidad: {
+        width: 32,
+        height: 32,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    botonMenos: {
+        backgroundColor: 'red',
+    },
+
+    botonMas: {
+        backgroundColor: 'black',
+    },
+
+    textoCantidad: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+
+    numeroCantidad: {
+        color: 'black',
+        fontSize: 16,
+        fontWeight: 'bold',
+        minWidth: 18,
+        textAlign: 'center',
     },
 
 });
