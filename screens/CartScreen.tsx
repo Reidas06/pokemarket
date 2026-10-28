@@ -93,7 +93,12 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                                 </Text>
 
                                 <Text style={styles.precioCarta}>
-                                    {articulo.carta.precio.toFixed(2).replace('.', ',')} €
+                                    Precio: {articulo.carta.precio.toFixed(2).replace('.', ',')} €
+                                </Text>
+
+                                <Text style={styles.subtotalCarta}>
+                                    Subtotal: {(articulo.carta.precio * articulo.cantidad)
+                                        .toFixed(2).replace('.', ',')} €
                                 </Text>
 
                                 <Text style={styles.detalleCarta}>
@@ -193,7 +198,7 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     precioCarta: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
         color: 'red',
         marginBottom: 6,
@@ -250,6 +255,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         minWidth: 18,
         textAlign: 'center',
+    },
+
+    subtotalCarta: {
+        color: 'red',
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginTop: 4,
     },
 
 });
