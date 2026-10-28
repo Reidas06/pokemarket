@@ -21,6 +21,7 @@ type Props = {
 export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Props) {
 
     const [popupVisible, setPopupVisible] = useState(false);
+    const [imagenAmpliadaVisible, setImagenAmpliadaVisible] = useState(false);
 
     const escala = useRef(new Animated.Value(0.8)).current;
     const opacidad = useRef(new Animated.Value(0)).current;
@@ -74,11 +75,13 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
             {/* ScrollIndicator en false para que no se vea la barra del scroll*/}
             <ScrollView contentContainerStyle={styles.contenido} showsVerticalScrollIndicator={false}>
                 {/*Imagen de la carta*/}
-                <Image
-                    source={{ uri: carta.imagen }}
-                    style={styles.imagen}
-                    resizeMode="contain"
-                />
+                <Pressable onPress={() => setImagenAmpliadaVisible(true)}>
+                    <Image
+                        source={{ uri: carta.imagen }}
+                        style={styles.imagen}
+                        resizeMode="contain"
+                    />
+                </Pressable>
 
                 <Text style={styles.nombre}>{carta.nombre}</Text>
 
@@ -147,8 +150,34 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                     </Animated.View>
                 </View>
             </Modal>
+            <Modal
+                transparent
+                visible={imagenAmpliadaVisible}
+                animationType="fade"
+                statusBarTranslucent
+                onRequestClose={() => setImagenAmpliadaVisible(false)}
+            >
+                <View style={styles.fondoImagenAmpliada}>
+                    <Pressable
+                        style={styles.fondoClicable}
+                        onPress={() => setImagenAmpliadaVisible(false)}
+                    />
 
-        </View>
+                    <Image
+                        source={{ uri: carta.imagen }}
+                        style={styles.imagenAmpliada}
+                        resizeMode="contain"
+                    />
+
+                    <Pressable
+                        style={styles.botonCerrarImagen}
+                        onPress={() => setImagenAmpliadaVisible(false)}
+                    >
+                        <Text style={styles.textoCerrarImagen}>✕</Text>
+                    </Pressable>
+                </View>
+            </Modal>
+        </View >
     );
 }
 
@@ -184,8 +213,8 @@ const styles = StyleSheet.create({
         paddingBottom: 35,
     },
     imagen: {
-        width: 200,
-        height: 280,
+        width: 160,
+        height: 220,
     },
     nombre: {
         color: 'black',
@@ -282,11 +311,43 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     textoPopup: {
-        color: '#555',
+        color: 'gray',
         fontSize: 15,
         textAlign: 'center',
         marginTop: 8,
         lineHeight: 22,
+    },
+    fondoImagenAmpliada: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    fondoClicable: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
+    imagenAmpliada: {
+        width: '100%',
+        height: '75%',
+    },
+    botonCerrarImagen: {
+        marginTop: 20,
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    textoCerrarImagen: {
+        color: 'white',
+        fontSize: 22,
+        fontWeight: 'bold',
     },
 
 });
