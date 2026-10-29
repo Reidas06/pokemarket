@@ -25,5 +25,131 @@
         "expansion": "Base",
         "numero": "15",
         "imagen": "https://images.pokemontcg.io/base1/15.png"
+    },
+    {
+        "id": "carta-13",
+        "nombre": "Pikachu ex",
+        "precio": 85,
+        "descripcion": "Carta de Pikachu ex perteneciente a la expansión Ascended Heroes. Su ilustración especial y la popularidad del Pokémon la convierten en una pieza interesante para una colección centrada en cartas destacadas. Su valor real dependerá de la versión exacta, el idioma, el estado de conservación y la evolución de la demanda.",
+        "expansion": "Ascended Heroes",
+        "numero": "276",
+        "imagen": "https://assets.tcgdex.net/en/me/me02.5/276/high.webp"
+    },
+    {
+        "id": "carta-14",
+        "nombre": "Mega Gengar ex",
+        "precio": 70,
+        "descripcion": "Carta de Mega Gengar ex de Ascended Heroes con ilustración especial. Es adecuada para representar cartas de colección de rareza elevada y permite estudiar cómo influyen la popularidad del personaje, la disponibilidad y el interés de los coleccionistas en su valoración.",
+        "expansion": "Ascended Heroes",
+        "numero": "284",
+        "imagen": "https://assets.tcgdex.net/en/me/me02.5/284/high.webp"
+    },
+    {
+        "id": "carta-15",
+        "nombre": "Mega Dragonite ex",
+        "precio": 55,
+        "descripcion": "Carta de Mega Dragonite ex con ilustración especial de Ascended Heroes. Su inclusión permite comparar una carta de alto interés coleccionista con otras de la misma expansión y observar las diferencias entre sus precios dentro del catálogo.",
+        "expansion": "Ascended Heroes",
+        "numero": "290",
+        "imagen": "https://assets.tcgdex.net/en/me/me02.5/290/high.webp"
+    },
+    {
+        "id": "carta-16",
+        "nombre": "Mega Charizard Y ex",
+        "precio": 60,
+        "descripcion": "Carta de Mega Charizard Y ex perteneciente a Ascended Heroes, con rareza Mega Hyper Rare. Es una buena candidata para representar cartas de presentación especial y comparar su precio con otras versiones del mismo Pokémon y otras rarezas.",
+        "expansion": "Ascended Heroes",
+        "numero": "294",
+        "imagen": "https://assets.tcgdex.net/en/me/me02.5/294/high.webp"
+    },
+    {
+        "id": "carta-17",
+        "nombre": "Mega-Darkrai ex",
+        "precio": 145,
+        "descripcion": "Mega-Darkrai ex es una de las cartas protagonistas de la expansión Oscuridad Absoluta. Su diseño oscuro representa al Pokémon asociado con las pesadillas y destaca por su ilustración de gran impacto visual. Es una carta interesante para estudiar cómo la popularidad de un Pokémon y la rareza de una versión pueden influir en su interés coleccionista.",
+        "expansion": "Oscuridad Absoluta",
+        "numero": "116",
+        "imagen": "https://assets.tcgdex.net/en/me/me05/116/high.webp"
+    },
+    {
+        "id": "carta-18",
+        "nombre": "Mega-Zeraora ex",
+        "precio": 38,
+        "descripcion": "Mega-Zeraora ex pertenece a Oscuridad Absoluta y destaca por su temática eléctrica y su diseño de Megaevolución. Es una alternativa a las cartas de tipo Siniestro dentro de la misma expansión y permite comparar el interés por distintos Pokémon protagonistas de una colección reciente.",
+        "expansion": "Oscuridad Absoluta",
+        "numero": "114",
+        "imagen": "https://assets.tcgdex.net/en/me/me05/114/high.webp"
+    },
+    {
+        "id": "carta-19",
+        "nombre": "Mega-Chandelure ex",
+        "precio": 35,
+        "descripcion": "Mega-Chandelure ex combina la estética espectral de Chandelure con el diseño de las cartas ex de Megaevolución. Su temática encaja con el ambiente misterioso de Oscuridad Absoluta y ofrece una opción interesante para coleccionistas que prefieren Pokémon de aspecto fantasmal.",
+        "expansion": "Oscuridad Absoluta",
+        "numero": "115",
+        "imagen": "https://assets.tcgdex.net/en/me/me05/115/high.webp"
+    },
+    {
+        "id": "carta-20",
+        "nombre": "Mega-Excadrill ex",
+        "precio": 12,
+        "descripcion": "Mega-Excadrill ex representa el lado más contundente de la expansión Oscuridad Absoluta. Su diseño está inspirado en un Pokémon conocido por sus ataques físicos y su afinidad con la tierra y el acero. Su precio de demostración más moderado permitirá comparar cartas de diferentes niveles de interés dentro de la misma colección.",
+        "expansion": "Oscuridad Absoluta",
+        "numero": "103",
+        "imagen": "https://assets.tcgdex.net/en/me/me05/103/high.webp"
+    },
+    {
+        "id": "carta-21",
+        "nombre": "Armarouge",
+        "precio": 4,
+        "descripcion": "Armarouge es un Pokémon de tipo Fuego con una armadura característica y una ilustración que destaca su temática de guerrero. Esta carta permite incluir una rareza y un rango de precio diferentes a los de las cartas ex, haciendo el catálogo más variado y útil para probar filtros y paginación.",
+        "expansion": "Oscuridad Absoluta",
+        "numero": "86",
+        "imagen": "https://assets.tcgdex.net/en/me/me05/086/high.webp"
+    },
+    {
+        "id": "carta-22",
+        "nombre": "Mega-Charizard X ex",
+        "precio": 220,
+        "descripcion": "Mega-Charizard X ex es una de las cartas más reconocibles de Llamas Fantasmales. La combinación de Charizard, su Megaevolución y una presentación visual llamativa la convierte en una buena candidata para estudiar diferencias de valoración entre versiones normales, raras y especiales.",
+        "expansion": "Llamas Fantasmales",
+        "numero": "125",
+        "imagen": "https://assets.tcgdex.net/en/me/me02/125/high.webp"
+    },
+    {
+        "id": "carta-23",
+        "nombre": "Mega-Gengar ex",
+        "precio": 28,
+        "descripcion": "Mega-Gengar ex combina una apariencia espectral con el diseño característico de las cartas ex de Megaevolución. Es una opción atractiva para representar cartas de temática fantasmal y comparar su precio de demostración con el de otras cartas destacadas de Llamas Fantasmales.",
+        "expansion": "Llamas Fantasmales",
+        "numero": "56",
+        "imagen": "https://assets.tcgdex.net/en/me/me02/056/high.webp"
+    },
+    {
+        "id": "carta-24",
+        "nombre": "Mega-Sharpedo ex",
+        "precio": 18,
+        "descripcion": "Mega-Sharpedo ex presenta una versión de Megaevolución de un Pokémon acuático de aspecto agresivo. Su diseño permite ampliar la variedad visual del catálogo y comparar una carta ex con otras de rareza superior de la misma expansión.",
+        "expansion": "Llamas Fantasmales",
+        "numero": "127",
+        "imagen": "https://assets.tcgdex.net/en/me/me02/127/high.webp"
+    },
+    {
+        "id": "carta-25",
+        "nombre": "Mega-Lopunny ex",
+        "precio": 15,
+        "descripcion": "Mega-Lopunny ex aporta una temática diferente a la colección, con una Megaevolución basada en velocidad y agilidad. Es una carta útil para diversificar los personajes del catálogo y comprobar que las descripciones largas se muestran correctamente en la pantalla de detalle.",
+        "expansion": "Llamas Fantasmales",
+        "numero": "128",
+        "imagen": "https://assets.tcgdex.net/en/me/me02/128/high.webp"
+    },
+    {
+        "id": "carta-26",
+        "nombre": "Rotom ex",
+        "precio": 20,
+        "descripcion": "Rotom ex destaca por la temática eléctrica y tecnológica del Pokémon. Su presencia en Llamas Fantasmales permite añadir variedad frente a las cartas de Megaevolución y probar cómo se presentan distintos nombres, ilustraciones, expansiones y precios en el catálogo.",
+        "expansion": "Llamas Fantasmales",
+        "numero": "126",
+        "imagen": "https://assets.tcgdex.net/en/me/me02/126/high.webp"
     }
 ]

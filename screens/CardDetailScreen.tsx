@@ -237,10 +237,11 @@ const styles = StyleSheet.create({
     },
     informacion: {
         width: '100%',
+        backgroundColor: '#F5F5F5',
         borderWidth: 1,
         borderColor: 'red',
-        borderRadius: 10,
-        padding: 16,
+        borderRadius: 12,
+        padding: 18,
         marginTop: 24,
     },
     etiqueta: {
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 20,
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 28,
         borderRadius: 10,
     },
     textoBotonCarrito: {
