@@ -22,10 +22,30 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
     // Texto que escribe el usuario en el buscador
     const [busqueda, setBusqueda] = useState('');
 
+    // Página actual del catálogo
+    const [paginaActual, setPaginaActual] = useState(1);
+
+    // Número de cartas que se mostrarán por página
+    const cartasPorPagina = 6;
+
     // Filtra las cartas en tiempo real comparando por nombre o descripción (en minúsculas para ignorar mayúsculas)
     const cartasFiltradas = (cartas as Carta[]).filter((carta) =>
         carta.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
         carta.descripcion.toLowerCase().includes(busqueda.toLowerCase())
+    );
+
+    // Índice de la primera carta de la página actual
+    const indiceInicial = (paginaActual - 1) * cartasPorPagina;
+
+    // Cartas que se mostrarán en la página actual
+    const cartasPaginadas = cartasFiltradas.slice(
+        indiceInicial,
+        indiceInicial + cartasPorPagina
+    );
+
+    // Número total de páginas
+    const totalPaginas = Math.ceil(
+        cartasFiltradas.length / cartasPorPagina
     );
 
     return (
@@ -45,13 +65,16 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                     style={styles.busqueda}
                     placeholder="Buscar cartas..."
                     value={busqueda}
-                    onChangeText={setBusqueda}
+                    onChangeText={(texto) => {
+                        setBusqueda(texto);
+                        setPaginaActual(1);
+                    }}
                 />
 
                 {/* ScrollIndicator en false para que no se vea la barra del scroll*/}
                 <ScrollView contentContainerStyle={styles.lista} showsVerticalScrollIndicator={false}>
                     {/*Bucle que recorre el array cartasFiltradas*/}
-                    {cartasFiltradas.map((carta) => (
+                    {cartasPaginadas.map((carta) => (
                         <Pressable key={carta.id} style={styles.tarjeta} onPress={() => alSeleccionarCarta(carta)}>
                             <Image
                                 source={{ uri: carta.imagen }}
@@ -77,6 +100,37 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                             No se han encontrado cartas.
                         </Text>
                     )}
+
+                    {cartasFiltradas.length > 0 && (
+                        <View style={styles.paginacion}>
+                            <Pressable
+                                style={[
+                                    styles.botonPagina,
+                                    paginaActual === 1 && styles.botonDesactivado,
+                                ]}
+                                disabled={paginaActual === 1}
+                                onPress={() => setPaginaActual(paginaActual - 1)}
+                            >
+                                <Text style={styles.textoBotonPagina}>Anterior</Text>
+                            </Pressable>
+
+                            <Text style={styles.textoPagina}>
+                                Página {paginaActual} de {totalPaginas}
+                            </Text>
+
+                            <Pressable
+                                style={[
+                                    styles.botonPagina,
+                                    paginaActual === totalPaginas && styles.botonDesactivado,
+                                ]}
+                                disabled={paginaActual === totalPaginas}
+                                onPress={() => setPaginaActual(paginaActual + 1)}
+                            >
+                                <Text style={styles.textoBotonPagina}>Siguiente</Text>
+                            </Pressable>
+                        </View>
+                    )}
+
                 </ScrollView>
             </View>
         </View>
@@ -164,6 +218,30 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'black',
         padding: 20,
+    },
+    paginacion: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 8,
+        marginBottom: 20,
+    },
+    botonPagina: {
+        backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        borderRadius: 20,
+    },
+    botonDesactivado: {
+        backgroundColor: '#CCCCCC',
+    },
+    textoBotonPagina: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    textoPagina: {
+        color: 'black',
+        fontWeight: 'bold',
     },
 });
 
