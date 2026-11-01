@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
 
 import cartas from '../data/cartas.json';
@@ -27,6 +27,8 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
 
     // Número de cartas que se mostrarán por página
     const cartasPorPagina = 6;
+
+    const scrollRef = useRef<ScrollView>(null);
 
     // Filtra las cartas en tiempo real comparando por nombre o descripción (en minúsculas para ignorar mayúsculas)
     const cartasFiltradas = (cartas as Carta[]).filter((carta) =>
@@ -72,7 +74,11 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                 />
 
                 {/* ScrollIndicator en false para que no se vea la barra del scroll*/}
-                <ScrollView contentContainerStyle={styles.lista} showsVerticalScrollIndicator={false}>
+                <ScrollView
+                    ref={scrollRef}
+                    contentContainerStyle={styles.lista}
+                    showsVerticalScrollIndicator={false}
+                >
                     {/*Bucle que recorre el array cartasFiltradas*/}
                     {cartasPaginadas.map((carta) => (
                         <Pressable key={carta.id} style={styles.tarjeta} onPress={() => alSeleccionarCarta(carta)}>
@@ -109,7 +115,10 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                                     paginaActual === 1 && styles.botonDesactivado,
                                 ]}
                                 disabled={paginaActual === 1}
-                                onPress={() => setPaginaActual(paginaActual - 1)}
+                                onPress={() => {
+                                    setPaginaActual(paginaActual - 1);
+                                    scrollRef.current?.scrollTo({ y: 0, animated: true });
+                                }}
                             >
                                 <Text style={styles.textoBotonPagina}>Anterior</Text>
                             </Pressable>
@@ -124,7 +133,10 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                                     paginaActual === totalPaginas && styles.botonDesactivado,
                                 ]}
                                 disabled={paginaActual === totalPaginas}
-                                onPress={() => setPaginaActual(paginaActual + 1)}
+                                onPress={() => {
+                                    setPaginaActual(paginaActual + 1);
+                                    scrollRef.current?.scrollTo({ y: 0, animated: true });
+                                }}
                             >
                                 <Text style={styles.textoBotonPagina}>Siguiente</Text>
                             </Pressable>
