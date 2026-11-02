@@ -151,5 +151,455 @@
         "expansion": "Llamas Fantasmales",
         "numero": "126",
         "imagen": "https://assets.tcgdex.net/en/me/me02/126/high.webp"
+    },
+    {
+        "id": "carta-27",
+        "nombre": "Mega-Zygarde ex",
+        "precio": 85,
+        "descripcion": "Mega-Zygarde ex es una de las cartas más destacadas de Orden Perfecto. Su diseño representa una poderosa Megaevolución y su ilustración especial resulta especialmente atractiva para los coleccionistas de Pokémon legendarios.",
+        "expansion": "Orden Perfecto",
+        "numero": "120",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/120/high.webp"
+    },
+    {
+        "id": "carta-28",
+        "nombre": "Mega-Starmie ex",
+        "precio": 30,
+        "descripcion": "Mega-Starmie ex destaca por su diseño inspirado en el misterioso Pokémon estrella. Su versión de ilustración especial combina una estética llamativa con una de las Megaevoluciones más interesantes de la expansión.",
+        "expansion": "Orden Perfecto",
+        "numero": "118",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/118/high.webp"
+    },
+    {
+        "id": "carta-29",
+        "nombre": "Mega-Clefable ex",
+        "precio": 38,
+        "descripcion": "Mega-Clefable ex aporta una temática mágica y fantástica al catálogo. Su ilustración especial resalta el carácter singular de Clefable y representa una opción atractiva para los aficionados a los Pokémon de tipo Hada.",
+        "expansion": "Orden Perfecto",
+        "numero": "119",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/119/high.webp"
+    },
+    {
+        "id": "carta-30",
+        "nombre": "Meowth ex",
+        "precio": 90,
+        "descripcion": "Meowth ex es una de las cartas más llamativas de Orden Perfecto. Su ilustración especial ofrece una representación diferente de uno de los Pokémon más reconocibles de la franquicia y destaca por su atractivo coleccionista.",
+        "expansion": "Orden Perfecto",
+        "numero": "121",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/121/high.webp"
+    },
+    {
+        "id": "carta-31",
+        "nombre": "Mega-Zygarde ex",
+        "precio": 120,
+        "descripcion": "Esta versión especial de Mega-Zygarde ex presenta un tratamiento visual de gran rareza. Es una carta ideal para representar las versiones premium de una expansión y comparar su valoración ficticia con otras cartas destacadas.",
+        "expansion": "Orden Perfecto",
+        "numero": "124",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/124/high.webp"
+    },
+    {
+        "id": "carta-32",
+        "nombre": "Clefairy",
+        "precio": 14,
+        "descripcion": "Clefairy aparece en una ilustración especial que resalta su aspecto adorable y su temática lunar. Es una carta interesante para los coleccionistas que prefieren ilustraciones artísticas de Pokémon clásicos.",
+        "expansion": "Orden Perfecto",
+        "numero": "94",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/094/high.webp"
+    },
+    {
+        "id": "carta-33",
+        "nombre": "Meowth ex",
+        "precio": 13,
+        "descripcion": "La versión de arte completo de Meowth ex ofrece una presentación visual diferente a su versión especial. Permite comparar distintas rarezas de una misma carta dentro de una expansión.",
+        "expansion": "Orden Perfecto",
+        "numero": "107",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/107/high.webp"
+    },
+    {
+        "id": "carta-34",
+        "nombre": "Poké Pad",
+        "precio": 10,
+        "descripcion": "Poké Pad es una carta de entrenador que destaca en su versión de arte completo. Su presencia permite ampliar el catálogo más allá de Pokémon y añadir variedad entre las cartas coleccionables.",
+        "expansion": "Orden Perfecto",
+        "numero": "113",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/113/high.webp"
+    },
+    {
+        "id": "carta-35",
+        "nombre": "Dedenne",
+        "precio": 5,
+        "descripcion": "Dedenne protagoniza una ilustración especial que destaca su aspecto simpático y su temática eléctrica. Es una carta que aporta variedad visual a la colección.",
+        "expansion": "Orden Perfecto",
+        "numero": "93",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/093/high.webp"
+    },
+    {
+        "id": "carta-36",
+        "nombre": "Rowlet",
+        "precio": 4,
+        "descripcion": "Rowlet aparece en una ilustración artística que resalta su personalidad tranquila y su diseño característico. Es una opción interesante para coleccionistas que buscan cartas de Pokémon populares.",
+        "expansion": "Orden Perfecto",
+        "numero": "90",
+        "imagen": "https://assets.tcgdex.net/en/me/me03/090/high.webp"
+    },
+    {
+        "id": "carta-37",
+        "nombre": "Umbreon ex",
+        "precio": 250,
+        "descripcion": "Umbreon ex es una de las cartas más emblemáticas de Evoluciones Prismáticas. Su ilustración especial destaca por su composición artística y por la popularidad de Umbreon entre los coleccionistas de Eeveelutions.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "161",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/161/high.webp"
+    },
+    {
+        "id": "carta-38",
+        "nombre": "Sylveon ex",
+        "precio": 150,
+        "descripcion": "Sylveon ex combina una ilustración colorida con uno de los Pokémon más populares de la familia Eevee. Su diseño especial aporta un toque elegante y fantástico a la colección.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "156",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/156/high.webp"
+    },
+    {
+        "id": "carta-39",
+        "nombre": "Leafeon ex",
+        "precio": 100,
+        "descripcion": "Leafeon ex destaca por su estética natural y su ilustración especial. Representa una de las evoluciones de Eevee más apreciadas por los aficionados a los Pokémon de tipo Planta.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "144",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/144/high.webp"
+    },
+    {
+        "id": "carta-40",
+        "nombre": "Espeon ex",
+        "precio": 120,
+        "descripcion": "Espeon ex presenta una ilustración especial que resalta su elegancia y su temática psíquica. Su popularidad entre los coleccionistas hace que sea una carta destacada dentro de la expansión.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "155",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/155/high.webp"
+    },
+    {
+        "id": "carta-41",
+        "nombre": "Glaceon ex",
+        "precio": 95,
+        "descripcion": "Glaceon ex ofrece una ilustración especial con una estética fría y elegante. Su diseño permite añadir variedad visual a las cartas de la familia Eevee.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "150",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/150/high.webp"
+    },
+    {
+        "id": "carta-42",
+        "nombre": "Vaporeon ex",
+        "precio": 90,
+        "descripcion": "Vaporeon ex destaca por su temática acuática y su ilustración especial. Es una carta representativa de las evoluciones clásicas de Eevee y una opción atractiva para coleccionistas.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "149",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/149/high.webp"
+    },
+    {
+        "id": "carta-43",
+        "nombre": "Flareon ex",
+        "precio": 80,
+        "descripcion": "Flareon ex aporta una estética cálida y relacionada con el fuego a la colección. Su ilustración especial destaca su aspecto característico y su popularidad entre las Eeveelutions.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "146",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/146/high.webp"
+    },
+    {
+        "id": "carta-44",
+        "nombre": "Jolteon ex",
+        "precio": 75,
+        "descripcion": "Jolteon ex presenta una ilustración especial con una temática eléctrica dinámica. Su diseño y su popularidad lo convierten en una carta interesante para ampliar la colección.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "153",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/153/high.webp"
+    },
+    {
+        "id": "carta-45",
+        "nombre": "Eevee ex",
+        "precio": 70,
+        "descripcion": "Eevee ex representa al Pokémon del que nacen numerosas evoluciones. Su ilustración especial destaca su carácter adorable y su importancia dentro de la franquicia.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "167",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/167/high.webp"
+    },
+    {
+        "id": "carta-46",
+        "nombre": "Pikachu ex",
+        "precio": 60,
+        "descripcion": "Pikachu ex es una carta muy reconocible gracias a la popularidad mundial de Pikachu. Su versión especial aporta un diseño atractivo para coleccionistas de Pokémon clásicos.",
+        "expansion": "Evoluciones Prismáticas",
+        "numero": "179",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv8.5/179/high.webp"
+    },
+    {
+        "id": "carta-47",
+        "nombre": "Charizard ex",
+        "precio": 180,
+        "descripcion": "Charizard ex es una de las cartas más populares de Pokémon 151. Su ilustración especial conecta con la nostalgia de los primeros Pokémon y destaca por su presentación artística.",
+        "expansion": "Pokémon 151",
+        "numero": "199",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/199/high.webp"
+    },
+    {
+        "id": "carta-48",
+        "nombre": "Blastoise ex",
+        "precio": 80,
+        "descripcion": "Blastoise ex representa a uno de los iniciales clásicos de Kanto. Su ilustración especial resalta su aspecto poderoso y su importancia para los coleccionistas de Pokémon originales.",
+        "expansion": "Pokémon 151",
+        "numero": "200",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/200/high.webp"
+    },
+    {
+        "id": "carta-49",
+        "nombre": "Venusaur ex",
+        "precio": 70,
+        "descripcion": "Venusaur ex es una carta representativa de la colección 151. Su ilustración especial destaca su diseño natural y completa el trío de iniciales evolucionados de Kanto.",
+        "expansion": "Pokémon 151",
+        "numero": "198",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/198/high.webp"
+    },
+    {
+        "id": "carta-50",
+        "nombre": "Pikachu",
+        "precio": 50,
+        "descripcion": "Pikachu protagoniza una ilustración especial que muestra su lado más entrañable. Es una carta muy reconocible y una incorporación importante para una colección centrada en los 151 Pokémon originales.",
+        "expansion": "Pokémon 151",
+        "numero": "173",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/173/high.webp"
+    },
+    {
+        "id": "carta-51",
+        "nombre": "Mew ex",
+        "precio": 90,
+        "descripcion": "Mew ex destaca por su rareza y por la importancia de Mew dentro de la historia Pokémon. Su ilustración especial ofrece una presentación visual atractiva para los coleccionistas.",
+        "expansion": "Pokémon 151",
+        "numero": "205",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/205/high.webp"
+    },
+    {
+        "id": "carta-52",
+        "nombre": "Alakazam ex",
+        "precio": 45,
+        "descripcion": "Alakazam ex es uno de los Pokémon psíquicos más reconocibles de Kanto. Su versión especial permite añadir una carta clásica con una ilustración destacada.",
+        "expansion": "Pokémon 151",
+        "numero": "201",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/201/high.webp"
+    },
+    {
+        "id": "carta-53",
+        "nombre": "Zapdos ex",
+        "precio": 55,
+        "descripcion": "Zapdos ex representa a uno de los pájaros legendarios de Kanto. Su ilustración especial destaca su energía eléctrica y su relevancia entre los Pokémon legendarios.",
+        "expansion": "Pokémon 151",
+        "numero": "202",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/202/high.webp"
+    },
+    {
+        "id": "carta-54",
+        "nombre": "Dragonair",
+        "precio": 25,
+        "descripcion": "Dragonair aparece en una ilustración especial que resalta su aspecto elegante y misterioso. Es una carta atractiva para quienes disfrutan de los Pokémon de tipo Dragón.",
+        "expansion": "Pokémon 151",
+        "numero": "181",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/181/high.webp"
+    },
+    {
+        "id": "carta-55",
+        "nombre": "Charmander",
+        "precio": 30,
+        "descripcion": "Charmander es uno de los Pokémon iniciales más queridos. Su ilustración especial destaca su personalidad y aporta un componente nostálgico a la colección.",
+        "expansion": "Pokémon 151",
+        "numero": "168",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/168/high.webp"
+    },
+    {
+        "id": "carta-56",
+        "nombre": "Squirtle",
+        "precio": 30,
+        "descripcion": "Squirtle aparece en una ilustración especial que resalta su carácter simpático. Es una carta representativa de los iniciales clásicos y de la temática nostálgica de Pokémon 151.",
+        "expansion": "Pokémon 151",
+        "numero": "170",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv03.5/170/high.webp"
+    },
+    {
+        "id": "carta-57",
+        "nombre": "Pikachu ex",
+        "precio": 220,
+        "descripcion": "Pikachu ex es la carta más reconocible de Chispas Fulgurantes en su versión de ilustración especial. Su diseño y la popularidad de Pikachu la convierten en una pieza destacada para coleccionistas.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "238",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/238/high.webp"
+    },
+    {
+        "id": "carta-58",
+        "nombre": "Latias ex",
+        "precio": 140,
+        "descripcion": "Latias ex destaca por su ilustración especial y su vínculo con los Pokémon legendarios de Hoenn. Su diseño ofrece una presentación artística muy atractiva.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "239",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/239/high.webp"
+    },
+    {
+        "id": "carta-59",
+        "nombre": "Milotic ex",
+        "precio": 100,
+        "descripcion": "Milotic ex presenta una ilustración especial que resalta su elegancia y su temática acuática. Es una carta apreciada por quienes prefieren diseños artísticos y Pokémon de aspecto elegante.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "237",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/237/high.webp"
+    },
+    {
+        "id": "carta-60",
+        "nombre": "Hydreigon ex",
+        "precio": 50,
+        "descripcion": "Hydreigon ex representa a un Pokémon de tipo Dragón y Siniestro con una estética imponente. Su ilustración especial aporta una temática oscura y poderosa al catálogo.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "240",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/240/high.webp"
+    },
+    {
+        "id": "carta-61",
+        "nombre": "Alolan Exeggutor ex",
+        "precio": 40,
+        "descripcion": "Alolan Exeggutor ex presenta una versión tropical y diferente de Exeggutor. Su ilustración especial destaca su aspecto peculiar y añade variedad a la colección.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "242",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/242/high.webp"
+    },
+    {
+        "id": "carta-62",
+        "nombre": "Ceruledge",
+        "precio": 20,
+        "descripcion": "Ceruledge aparece en una ilustración especial que resalta su diseño inspirado en un guerrero espectral. Es una carta visualmente atractiva para los aficionados a Pokémon de aspecto oscuro.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "197",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/197/high.webp"
+    },
+    {
+        "id": "carta-63",
+        "nombre": "Latios",
+        "precio": 25,
+        "descripcion": "Latios protagoniza una ilustración especial que conecta con Latias y la temática de los Pokémon legendarios de Hoenn. Su diseño aporta un elemento artístico y nostálgico.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "203",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/203/high.webp"
+    },
+    {
+        "id": "carta-64",
+        "nombre": "Feebas",
+        "precio": 12,
+        "descripcion": "Feebas aparece en una ilustración especial que contrasta su aspecto sencillo con el carácter elegante de su evolución Milotic. Es una carta interesante para coleccionistas de líneas evolutivas.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "198",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/198/high.webp"
+    },
+    {
+        "id": "carta-65",
+        "nombre": "Spheal",
+        "precio": 10,
+        "descripcion": "Spheal protagoniza una ilustración especial de aspecto simpático. Su diseño aporta variedad y un toque divertido a la colección de Chispas Fulgurantes.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "199",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/199/high.webp"
+    },
+    {
+        "id": "carta-66",
+        "nombre": "Braviary",
+        "precio": 8,
+        "descripcion": "Braviary aparece en una ilustración especial que resalta su carácter de Pokémon volador y su apariencia majestuosa. Es una carta útil para ampliar la diversidad visual del catálogo.",
+        "expansion": "Chispas Fulgurantes",
+        "numero": "214",
+        "imagen": "https://assets.tcgdex.net/en/sv/sv08/214/high.webp"
+    },
+    {
+        "id": "carta-67",
+        "nombre": "Mega-Lucario ex",
+        "precio": 200,
+        "descripcion": "Mega-Lucario ex es una de las cartas más destacadas de la primera expansión de Megaevolución. Su ilustración especial resalta el diseño de combate de Lucario y su popularidad entre los coleccionistas.",
+        "expansion": "Megaevolución",
+        "numero": "179",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/179/high.webp"
+    },
+    {
+        "id": "carta-68",
+        "nombre": "Mega-Gardevoir ex",
+        "precio": 180,
+        "descripcion": "Mega-Gardevoir ex destaca por su ilustración especial y su diseño elegante. Es una carta muy reconocible para los aficionados a Gardevoir y a las Megaevoluciones.",
+        "expansion": "Megaevolución",
+        "numero": "178",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/178/high.webp"
+    },
+    {
+        "id": "carta-69",
+        "nombre": "Mega-Venusaur ex",
+        "precio": 120,
+        "descripcion": "Mega-Venusaur ex representa una de las Megaevoluciones clásicas de los iniciales de Kanto. Su ilustración especial resalta su aspecto poderoso y su importancia nostálgica.",
+        "expansion": "Megaevolución",
+        "numero": "177",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/177/high.webp"
+    },
+    {
+        "id": "carta-70",
+        "nombre": "Mega-Absol ex",
+        "precio": 50,
+        "descripcion": "Mega-Absol ex presenta una estética oscura y elegante. Su ilustración especial destaca su diseño característico y lo convierte en una carta atractiva para coleccionistas.",
+        "expansion": "Megaevolución",
+        "numero": "180",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/180/high.webp"
+    },
+    {
+        "id": "carta-71",
+        "nombre": "Mega-Latias ex",
+        "precio": 70,
+        "descripcion": "Mega-Latias ex combina la temática de los Pokémon legendarios de Hoenn con el diseño de Megaevolución. Su ilustración especial aporta una presentación visual llamativa.",
+        "expansion": "Megaevolución",
+        "numero": "181",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/181/high.webp"
+    },
+    {
+        "id": "carta-72",
+        "nombre": "Mega-Kangaskhan ex",
+        "precio": 50,
+        "descripcion": "Mega-Kangaskhan ex destaca por su diseño familiar y su Megaevolución característica. Su ilustración especial añade variedad a la colección y permite comparar diferentes Pokémon Mega.",
+        "expansion": "Megaevolución",
+        "numero": "182",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/182/high.webp"
+    },
+    {
+        "id": "carta-73",
+        "nombre": "Mega-Camerupt ex",
+        "precio": 15,
+        "descripcion": "Mega-Camerupt ex presenta una Megaevolución de temática volcánica. Su diseño robusto y su aspecto de tipo Fuego aportan variedad al catálogo.",
+        "expansion": "Megaevolución",
+        "numero": "156",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/156/high.webp"
+    },
+    {
+        "id": "carta-74",
+        "nombre": "Mega-Abomasnow ex",
+        "precio": 15,
+        "descripcion": "Mega-Abomasnow ex ofrece una estética invernal y un diseño de Megaevolución característico. Es una carta interesante para ampliar la representación de Pokémon de tipo Hielo.",
+        "expansion": "Megaevolución",
+        "numero": "157",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/157/high.webp"
+    },
+    {
+        "id": "carta-75",
+        "nombre": "Mega-Manectric ex",
+        "precio": 20,
+        "descripcion": "Mega-Manectric ex destaca por su temática eléctrica y su diseño dinámico. Su versión de arte completo permite comparar diferentes tratamientos visuales dentro de la expansión.",
+        "expansion": "Megaevolución",
+        "numero": "158",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/158/high.webp"
+    },
+    {
+        "id": "carta-76",
+        "nombre": "Mega-Mawile ex",
+        "precio": 20,
+        "descripcion": "Mega-Mawile ex presenta una Megaevolución de aspecto peculiar y llamativo. Su diseño permite diversificar la colección y añadir una carta menos habitual entre las protagonistas del catálogo.",
+        "expansion": "Megaevolución",
+        "numero": "162",
+        "imagen": "https://assets.tcgdex.net/en/me/me01/162/high.webp"
     }
 ]
