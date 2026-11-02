@@ -22,6 +22,10 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
     // Texto que escribe el usuario en el buscador
     const [busqueda, setBusqueda] = useState('');
 
+    const [expansionSeleccionada, setExpansionSeleccionada] = useState('Todas las expansiones');
+
+    const [desplegableAbierto, setDesplegableAbierto] = useState(false);
+
     // Página actual del catálogo
     const [paginaActual, setPaginaActual] = useState(1);
 
@@ -31,9 +35,10 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
     const scrollRef = useRef<ScrollView>(null);
 
     // Filtra las cartas en tiempo real comparando por nombre o descripción (en minúsculas para ignorar mayúsculas)
+
     const cartasFiltradas = (cartas as Carta[]).filter((carta) =>
-        carta.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-        carta.descripcion.toLowerCase().includes(busqueda.toLowerCase())
+        (expansionSeleccionada === 'Todas las expansiones' || carta.expansion === expansionSeleccionada) &&
+        (carta.nombre.toLowerCase().includes(busqueda.toLowerCase()) || carta.descripcion.toLowerCase().includes(busqueda.toLowerCase()))
     );
 
     // Índice de la primera carta de la página actual
@@ -49,6 +54,15 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
     const totalPaginas = Math.ceil(
         cartasFiltradas.length / cartasPorPagina
     );
+
+    //Seleccionador de expansiones reactivo
+    const expansiones = [
+        'Todas las expansiones',
+        ...Array.from(
+            new Set((cartas as Carta[]).map((carta) => carta.expansion))
+        ).sort((a, b) => a.localeCompare(b)),
+    ];
+
 
     return (
         <View style={styles.contenedor}>
@@ -72,6 +86,52 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                         setPaginaActual(1);
                     }}
                 />
+
+
+                <Pressable
+                    style={styles.selectorExpansion}
+                    onPress={() => setDesplegableAbierto(!desplegableAbierto)}
+                >
+                    <Text style={styles.textoSelector}>
+                        {expansionSeleccionada}
+                    </Text>
+
+                    <Text style={styles.iconoSelector}>
+                        {desplegableAbierto ? '▲' : '▼'}
+                    </Text>
+                </Pressable>
+
+                {desplegableAbierto && (
+                    <View style={styles.listaExpansiones}>
+                        {expansiones.map((expansion) => (
+                            <Pressable
+                                key={expansion}
+                                style={[
+                                    styles.opcionExpansion,
+                                    expansionSeleccionada === expansion &&
+                                    styles.opcionSeleccionada,
+                                ]}
+                                onPress={() => {
+                                    setExpansionSeleccionada(expansion);
+                                    setPaginaActual(1);
+                                    setDesplegableAbierto(false);
+                                    scrollRef.current?.scrollTo({ y: 0, animated: true });
+                                }}
+                            >
+                                <Text
+                                    style={[
+                                        styles.textoOpcion,
+                                        expansionSeleccionada === expansion &&
+                                        styles.textoOpcionSeleccionada,
+                                    ]}
+                                >
+                                    {expansion}
+                                </Text>
+                            </Pressable>
+                        ))}
+                    </View>
+                )}
+
 
                 {/* ScrollIndicator en false para que no se vea la barra del scroll*/}
                 <ScrollView
@@ -255,5 +315,50 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'bold',
     },
+    selectorExpansion: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'red',
+        borderRadius: 24,
+        padding: 12,
+        marginBottom: 16,
+        backgroundColor: 'white',
+    },
+    textoSelector: {
+        color: 'black',
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    iconoSelector: {
+        color: 'red',
+        fontSize: 14,
+    },
+    listaExpansiones: {
+        borderWidth: 1,
+        borderColor: 'red',
+        borderRadius: 16,
+        backgroundColor: 'white',
+        marginBottom: 16,
+        overflow: 'hidden',
+    },
+    opcionExpansion: {
+        padding: 14,
+        borderBottomWidth: 1,
+        borderBottomColor: '#EEEEEE',
+    },
+    opcionSeleccionada: {
+        backgroundColor: '#FFE5E5',
+    },
+    textoOpcion: {
+        color: 'black',
+        fontSize: 14,
+    },
+    textoOpcionSeleccionada: {
+        color: 'red',
+        fontWeight: 'bold',
+    },
+
 });
 
