@@ -35,7 +35,6 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
     const scrollRef = useRef<ScrollView>(null);
 
     // Filtra las cartas en tiempo real comparando por nombre o descripción (en minúsculas para ignorar mayúsculas)
-
     const cartasFiltradas = (cartas as Carta[]).filter((carta) =>
         (expansionSeleccionada === 'Todas las expansiones' || carta.expansion === expansionSeleccionada) &&
         (carta.nombre.toLowerCase().includes(busqueda.toLowerCase()) || carta.descripcion.toLowerCase().includes(busqueda.toLowerCase()))
@@ -102,7 +101,11 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                 </Pressable>
 
                 {desplegableAbierto && (
-                    <View style={styles.listaExpansiones}>
+                    <ScrollView
+                        style={styles.listaExpansiones}
+                        nestedScrollEnabled={true}
+                        showsVerticalScrollIndicator={true}
+                    >
                         {expansiones.map((expansion) => (
                             <Pressable
                                 key={expansion}
@@ -129,7 +132,7 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                                 </Text>
                             </Pressable>
                         ))}
-                    </View>
+                    </ScrollView>
                 )}
 
 
