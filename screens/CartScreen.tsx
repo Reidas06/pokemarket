@@ -1,26 +1,11 @@
 import { StyleSheet, Text, View, Image, ScrollView, Alert, Pressable } from "react-native";
+import { Carta, ArticuloCarrito } from '../src/types/card';
 import Icon from '@expo/vector-icons/Ionicons';
-
-
-type Carta = {
-    id: string;
-    nombre: string;
-    precio: number;
-    descripcion: string;
-    expansion: string;
-    numero: string;
-    imagen: string;
-};
 
 type Props = {
     carrito: ArticuloCarrito[]
     alEliminarCarta: (id: string) => void;
     alCambiarCantidad: (id: string, cambio: number) => void;
-};
-
-type ArticuloCarrito = {
-    carta: Carta;
-    cantidad: number;
 };
 
 export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad }: Props) {
@@ -53,7 +38,9 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
 
                 {/* Calculamos con reduce el total de unidades y el precio total acumulado */}
                 <Text style={styles.subtitulo}>
-                    {carrito.reduce((total, articulo) => total + articulo.cantidad, 0)} artículos · {carrito.reduce((total, articulo) => total + articulo.carta.precio * articulo.cantidad, 0).toFixed(2).replace('.', ',')} €
+                    {carrito.every(articulo => articulo.carta.precio !== null)
+                        ? `${carrito.reduce((total, articulo) => total + articulo.carta.precio! * articulo.cantidad, 0).toFixed(2).replace('.', ',')} €`
+                        : 'Total pendiente'}
                 </Text>
             </View>
 
@@ -74,7 +61,7 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                     {carrito.map((articulo, indice) => (
                         <View key={`${articulo.carta.id}-${indice}`} style={styles.itemCarta}>
                             <Image
-                                source={{ uri: articulo.carta.imagen }}
+                                source={articulo.carta.imagen ? { uri: articulo.carta.imagen } : undefined}
                                 style={styles.imagenCarta}
                                 resizeMode="contain"
                             />
@@ -93,12 +80,15 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                                 </Text>
 
                                 <Text style={styles.precioCarta}>
-                                    Precio: {articulo.carta.precio.toFixed(2).replace('.', ',')} €
+                                    Precio: {articulo.carta.precio !== null
+                                        ? `${articulo.carta.precio.toFixed(2).replace('.', ',')} €`
+                                        : 'Pendiente'}
                                 </Text>
 
                                 <Text style={styles.subtotalCarta}>
-                                    Subtotal: {(articulo.carta.precio * articulo.cantidad)
-                                        .toFixed(2).replace('.', ',')} €
+                                    Subtotal: {articulo.carta.precio !== null
+                                        ? `${(articulo.carta.precio * articulo.cantidad).toFixed(2).replace('.', ',')} €`
+                                        : 'Pendiente'}
                                 </Text>
 
                                 <Text style={styles.detalleCarta}>

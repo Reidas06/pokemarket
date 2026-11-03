@@ -1,16 +1,7 @@
 
 import { Image, ScrollView, StyleSheet, Text, View, Pressable, Modal, Animated } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
-
-type Carta = {
-    id: string;
-    nombre: string;
-    precio: number;
-    descripcion: string;
-    expansion: string;
-    numero: string;
-    imagen: string;
-};
+import { Carta } from '../src/types/card';
 
 type Props = {
     carta: Carta;
@@ -77,7 +68,7 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                 {/*Imagen de la carta*/}
                 <Pressable onPress={() => setImagenAmpliadaVisible(true)}>
                     <Image
-                        source={{ uri: carta.imagen }}
+                        source={carta.imagen ? { uri: carta.imagen } : undefined}
                         style={styles.imagen}
                         resizeMode="contain"
                     />
@@ -86,7 +77,9 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                 <Text style={styles.nombre}>{carta.nombre}</Text>
 
                 <Text style={styles.precio}>
-                    {carta.precio.toFixed(2)} €
+                    {carta.precio !== null
+                        ? `${carta.precio.toFixed(2)} €`
+                        : 'Precio no disponible'}
                 </Text>
 
                 <Text style={styles.descripcion}>{carta.descripcion}</Text>
@@ -164,7 +157,7 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                     />
 
                     <Image
-                        source={{ uri: carta.imagen }}
+                        source={carta.imagen ? { uri: carta.imagen } : undefined}
                         style={styles.imagenAmpliada}
                         resizeMode="contain"
                     />

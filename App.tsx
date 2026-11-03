@@ -9,24 +9,10 @@ import CartScreen from './screens/CartScreen';
 import BottomBar from './components/BottomBar';
 import AccountScreen from './screens/AccountScreen';
 import { supabase } from './src/services/supabase';
+import type { Carta, ArticuloCarrito } from './src/types/card';
 
 
 type Pantalla = 'Inicio' | 'Colección' | 'Carrito' | 'Cuenta';
-
-type Carta = {
-  id: string;
-  nombre: string;
-  precio: number;
-  descripcion: string;
-  expansion: string;
-  numero: string;
-  imagen: string;
-};
-
-type ArticuloCarrito = {
-  carta: Carta;
-  cantidad: number;
-};
 
 export default function App() {
   useEffect(() => {
