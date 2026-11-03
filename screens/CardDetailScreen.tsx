@@ -66,13 +66,21 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
             {/* ScrollIndicator en false para que no se vea la barra del scroll*/}
             <ScrollView contentContainerStyle={styles.contenido} showsVerticalScrollIndicator={false}>
                 {/*Imagen de la carta*/}
-                <Pressable onPress={() => setImagenAmpliadaVisible(true)}>
-                    <Image
-                        source={carta.imagen ? { uri: carta.imagen } : undefined}
-                        style={styles.imagen}
-                        resizeMode="contain"
-                    />
-                </Pressable>
+                {carta.imagen ? (
+                    <Pressable onPress={() => setImagenAmpliadaVisible(true)}>
+                        <Image
+                            source={{ uri: carta.imagen }}
+                            style={styles.imagen}
+                            resizeMode="contain"
+                        />
+                    </Pressable>
+                ) : (
+                    <View style={[styles.imagen, styles.imagenVacia]}>
+                        <Text style={styles.descripcion}>
+                            Imagen no disponible
+                        </Text>
+                    </View>
+                )}
 
                 <Text style={styles.nombre}>{carta.nombre}</Text>
 
@@ -156,11 +164,13 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                         onPress={() => setImagenAmpliadaVisible(false)}
                     />
 
-                    <Image
-                        source={carta.imagen ? { uri: carta.imagen } : undefined}
-                        style={styles.imagenAmpliada}
-                        resizeMode="contain"
-                    />
+                    {carta.imagen && (
+                        <Image
+                            source={{ uri: carta.imagen }}
+                            style={styles.imagenAmpliada}
+                            resizeMode="contain"
+                        />
+                    )}
 
                     <Pressable
                         style={styles.botonCerrarImagen}
@@ -343,5 +353,8 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: 'bold',
     },
-
+    imagenVacia: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });

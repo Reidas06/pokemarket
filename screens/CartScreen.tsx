@@ -60,11 +60,19 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                     {/*Bucle que recorre el array carrito*/}
                     {carrito.map((articulo, indice) => (
                         <View key={`${articulo.carta.id}-${indice}`} style={styles.itemCarta}>
-                            <Image
-                                source={articulo.carta.imagen ? { uri: articulo.carta.imagen } : undefined}
-                                style={styles.imagenCarta}
-                                resizeMode="contain"
-                            />
+                            {articulo.carta.imagen ? (
+                                <Image
+                                    source={{ uri: articulo.carta.imagen }}
+                                    style={styles.imagenCarta}
+                                    resizeMode="contain"
+                                />
+                            ) : (
+                                <View style={[styles.imagenCarta, styles.imagenVacia]}>
+                                    <Text style={styles.textoImagenVacia}>
+                                        Sin imagen
+                                    </Text>
+                                </View>
+                            )}
 
                             <View style={styles.infoCarta}>
                                 {/* Botón papelera para borrar la carta */}
@@ -209,14 +217,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#FCE8E8',
     },
-
     cantidadControles: {
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 10,
         gap: 12,
     },
-
     botonCantidad: {
         width: 32,
         height: 32,
@@ -224,21 +230,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-
     botonMenos: {
         backgroundColor: 'red',
     },
-
     botonMas: {
         backgroundColor: 'black',
     },
-
     textoCantidad: {
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
     },
-
     numeroCantidad: {
         color: 'black',
         fontSize: 16,
@@ -246,12 +248,21 @@ const styles = StyleSheet.create({
         minWidth: 18,
         textAlign: 'center',
     },
-
     subtotalCarta: {
         color: 'red',
         fontSize: 14,
         fontWeight: 'bold',
         marginTop: 4,
     },
-
+    imagenVacia: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5F5F5',
+        borderRadius: 8,
+    },
+    textoImagenVacia: {
+        color: 'gray',
+        fontSize: 12,
+        textAlign: 'center',
+    },
 });
