@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import { useState } from 'react';
 import Icon from '@expo/vector-icons/Ionicons';
 
 export default function AccountScreen() {
+
+    const [modoRegistro, setModoRegistro] = useState(false);
+
     return (
         <View style={styles.contenedor}>
             <View style={styles.cabecera}>
@@ -15,14 +19,20 @@ export default function AccountScreen() {
 
                     {/* Selector entre inicio de sesión y registro */}
                     <View style={styles.selector}>
-                        <Pressable style={styles.opcionActiva}>
-                            <Text style={styles.textoActivo}>
+                        <Pressable
+                            style={modoRegistro ? styles.opcionInactiva : styles.opcionActiva}
+                            onPress={() => setModoRegistro(false)}
+                        >
+                            <Text style={modoRegistro ? styles.textoInactivo : styles.textoActivo}>
                                 Iniciar sesión
                             </Text>
                         </Pressable>
 
-                        <Pressable style={styles.opcionInactiva}>
-                            <Text style={styles.textoInactivo}>
+                        <Pressable
+                            style={modoRegistro ? styles.opcionActiva : styles.opcionInactiva}
+                            onPress={() => setModoRegistro(true)}
+                        >
+                            <Text style={modoRegistro ? styles.textoActivo : styles.textoInactivo}>
                                 Registrarse
                             </Text>
                         </Pressable>
@@ -49,6 +59,12 @@ export default function AccountScreen() {
                         placeholder="Introduce tu contraseña"
                         secureTextEntry
                     />
+
+                    <Pressable style={styles.boton}>
+                        <Text style={styles.textoBoton}>
+                            Iniciar sesión
+                        </Text>
+                    </Pressable>
                 </View>
             </View>
         </View>
@@ -126,10 +142,21 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 1,
         borderColor: 'red',
+        borderRadius: 24,
+        padding: 12,
+        marginBottom: 16,
+        color: 'black',
+    },
+    boton: {
+        backgroundColor: 'red',
+        paddingVertical: 14,
+        alignItems: 'center',
         borderRadius: 12,
-        padding: 14,
+        marginTop: 4,
+    },
+    textoBoton: {
+        color: 'white',
         fontSize: 16,
-        marginBottom: 20,
-        backgroundColor: 'white',
+        fontWeight: 'bold',
     },
 });
