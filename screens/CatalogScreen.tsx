@@ -77,6 +77,7 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                 description,
                 collector_number,
                 image_url,
+                selling_price,
                 sets (
                     name
                 )
@@ -94,7 +95,7 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
             const cartasAdaptadas: Carta[] = data.map((carta) => ({
                 id: carta.id,
                 nombre: carta.name,
-                precio: null,
+                precio: carta.selling_price,
                 descripcion: carta.description ?? '',
                 expansion: carta.sets?.[0]?.name ?? 'Sin expansión',
                 numero: carta.collector_number,
