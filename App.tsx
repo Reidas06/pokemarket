@@ -7,6 +7,7 @@ import CatalogScreen from './screens/CatalogScreen';
 import CardDetailScreen from './screens/CardDetailScreen';
 import CartScreen from './screens/CartScreen';
 import BottomBar from './components/BottomBar';
+import AccountScreen from './screens/AccountScreen';
 
 
 type Pantalla = 'Inicio' | 'Colección' | 'Carrito' | 'Cuenta';
@@ -64,8 +65,12 @@ export default function App() {
       <View style={{ flex: 1 }}>
         {pantallaActual === 'Carrito' ? (
           <CartScreen
-            carrito={carrito} alEliminarCarta={eliminarCarta} alCambiarCantidad={cambiarCantidad}
+            carrito={carrito}
+            alEliminarCarta={eliminarCarta}
+            alCambiarCantidad={cambiarCantidad}
           />
+        ) : pantallaActual === 'Cuenta' ? (
+          <AccountScreen />
         ) : cartaSeleccionada === null ? (
           <CatalogScreen
             alSeleccionarCarta={(carta) => setCartaSeleccionada(carta)}

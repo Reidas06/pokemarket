@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     subtitulo: {
-        color: 'black',
+        color: 'white',
         fontSize: 14,
         marginTop: 4,
     },
