@@ -1,24 +1,25 @@
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
 
-import cartas from '../data/cartas.json';
-
-type Carta = {
-    id: string;
-    nombre: string;
-    precio: number;
-    descripcion: string;
-    expansion: string;
-    numero: string;
-    imagen: string;
-};
+import { supabase } from '../src/services/supabase';
+import { Carta } from '../src/types/card';
 
 type Props = {
     alSeleccionarCarta: (carta: Carta) => void;
 };
 
 export default function CatalogScreen({ alSeleccionarCarta }: Props) {
+
+    // Cartas obtenidas desde Supabase
+    const [cartas, setCartas] = useState<Carta[]>([]);
+
+    // Controla si estamos cargando las cartas
+    const [cargando, setCargando] = useState(true);
+
+    // Guarda posibles errores de conexión
+    const [error, setError] = useState<string | null>(null);
+
     // Texto que escribe el usuario en el buscador
     const [busqueda, setBusqueda] = useState('');
 
@@ -35,7 +36,7 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
     const scrollRef = useRef<ScrollView>(null);
 
     // Filtra las cartas en tiempo real comparando por nombre o descripción (en minúsculas para ignorar mayúsculas)
-    const cartasFiltradas = (cartas as Carta[]).filter((carta) =>
+    const cartasFiltradas = cartas.filter((carta) =>
         (expansionSeleccionada === 'Todas las expansiones' || carta.expansion === expansionSeleccionada) &&
         (carta.nombre.toLowerCase().includes(busqueda.toLowerCase()) || carta.descripcion.toLowerCase().includes(busqueda.toLowerCase()))
     );
@@ -58,10 +59,54 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
     const expansiones = [
         'Todas las expansiones',
         ...Array.from(
-            new Set((cartas as Carta[]).map((carta) => carta.expansion))
+            new Set(cartas.map((carta) => carta.expansion))
         ).sort((a, b) => a.localeCompare(b)),
     ];
 
+    // Obtiene las cartas activas y sus expansiones desde Supabase
+    useEffect(() => {
+        async function cargarCartas() {
+            setCargando(true);
+            setError(null);
+
+            const { data, error } = await supabase
+                .from('cards')
+                .select(`
+                id,
+                name,
+                description,
+                collector_number,
+                image_url,
+                sets (
+                    name
+                )
+            `)
+                .eq('is_active', true)
+                .order('collector_number');
+
+            if (error) {
+                console.log('Error al cargar las cartas:', error.message);
+                setError('No se han podido cargar las cartas.');
+                setCargando(false);
+                return;
+            }
+
+            const cartasAdaptadas: Carta[] = data.map((carta) => ({
+                id: carta.id,
+                nombre: carta.name,
+                precio: null,
+                descripcion: carta.description ?? '',
+                expansion: carta.sets?.[0]?.name ?? 'Sin expansión',
+                numero: carta.collector_number,
+                imagen: carta.image_url,
+            }));
+
+            setCartas(cartasAdaptadas);
+            setCargando(false);
+        }
+
+        cargarCartas();
+    }, []);
 
     return (
         <View style={styles.contenedor}>
@@ -142,14 +187,41 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                     contentContainerStyle={styles.lista}
                     showsVerticalScrollIndicator={false}
                 >
+
+                    {cargando && (
+                        <Text style={styles.sinResultados}>
+                            Cargando cartas...
+                        </Text>
+                    )}
+
+                    {error !== null && (
+                        <Text style={styles.sinResultados}>
+                            {error}
+                        </Text>
+                    )}
+
                     {/*Bucle que recorre el array cartasFiltradas*/}
                     {cartasPaginadas.map((carta) => (
-                        <Pressable key={carta.id} style={styles.tarjeta} onPress={() => alSeleccionarCarta(carta)}>
-                            <Image
-                                source={{ uri: carta.imagen }}
-                                style={styles.imagen}
-                                resizeMode="contain"
-                            />
+                        <Pressable
+                            key={carta.id}
+                            style={styles.tarjeta}
+                            onPress={() => alSeleccionarCarta(carta)}
+                        >
+                            {carta.imagen ? (
+                                <Image
+                                    source={{ uri: carta.imagen }}
+                                    style={styles.imagen}
+                                    resizeMode="contain"
+                                />
+                            ) : (
+                                <View style={[styles.imagen, styles.imagenVacia]}>
+                                    <Text style={styles.detalle}>
+                                        Imagen no disponible
+                                    </Text>
+                                </View>
+                            )}
+
+                            {/* Aquí continúa el nombre, expansión, número y precio */}
 
                             <Text style={styles.nombre}>{carta.nombre}</Text>
                             <Text style={styles.detalle}>
@@ -159,12 +231,14 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                                 Número: {carta.numero}
                             </Text>
                             <Text style={styles.precio}>
-                                {carta.precio.toFixed(2)} €
+                                {carta.precio !== null
+                                    ? `${carta.precio.toFixed(2).replace('.', ',')} €`
+                                    : 'Precio no disponible'}
                             </Text>
                         </Pressable>
                     ))}
 
-                    {cartasFiltradas.length === 0 && (
+                    {!cargando && error === null && cartasFiltradas.length === 0 && (
                         <Text style={styles.sinResultados}>
                             No se han encontrado cartas.
                         </Text>
@@ -362,6 +436,9 @@ const styles = StyleSheet.create({
         color: 'red',
         fontWeight: 'bold',
     },
-
+    imagenVacia: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
 
