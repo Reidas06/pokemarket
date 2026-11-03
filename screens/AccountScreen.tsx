@@ -1,10 +1,125 @@
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Alert } from 'react-native';
 import { useState } from 'react';
 import Icon from '@expo/vector-icons/Ionicons';
 
 export default function AccountScreen() {
 
+    // Inicio de sesión    
     const [modoRegistro, setModoRegistro] = useState(false);
+
+    // Checkboxes 
+    const [aceptaCondiciones, setAceptaCondiciones] = useState(false);
+    const [aceptaComunicaciones, setAceptaComunicaciones] = useState(false);
+
+    // Datos del formulario de registro
+    const [nombre, setNombre] = useState('');
+    const [apellidos, setApellidos] = useState('');
+    const [usuario, setUsuario] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [contrasena, setContrasena] = useState('');
+    const [confirmarContrasena, setConfirmarContrasena] = useState('');
+
+    // Errores de validación del formulario
+    const [errores, setErrores] = useState({
+        nombre: '',
+        apellidos: '',
+        usuario: '',
+        correo: '',
+        contrasena: '',
+        confirmarContrasena: '',
+        condiciones: '',
+    });
+
+    const mostrarError = (mensaje: string) => {
+        if (!mensaje) return null;
+
+        return (
+            <Text style={styles.textoError}>
+                {mensaje}
+            </Text>
+        );
+    };
+
+    const validarRegistro = () => {
+        const nuevosErrores = {
+            nombre: '',
+            apellidos: '',
+            usuario: '',
+            correo: '',
+            contrasena: '',
+            confirmarContrasena: '',
+            condiciones: '',
+        };
+
+        // Comprobar campos obligatorios
+        if (!nombre.trim()) {
+            nuevosErrores.nombre = 'Introduce tu nombre.';
+        }
+
+        if (!apellidos.trim()) {
+            nuevosErrores.apellidos = 'Introduce tus apellidos.';
+        }
+
+        if (!usuario.trim()) {
+            nuevosErrores.usuario = 'Introduce un nombre de usuario.';
+        }
+
+        // Comprobar formato del correo
+        const formatoCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!correo.trim()) {
+            nuevosErrores.correo = 'Introduce tu correo electrónico.';
+        } else if (!formatoCorreo.test(correo.trim())) {
+            nuevosErrores.correo = 'Introduce un correo electrónico válido.';
+        }
+
+        // Comprobar contraseña
+        if (!contrasena) {
+            nuevosErrores.contrasena = 'Introduce una contraseña.';
+        } else if (contrasena.length < 8) {
+            nuevosErrores.contrasena = 'Debe tener al menos 8 caracteres.';
+        }
+
+        // Comprobar confirmación
+        if (!confirmarContrasena) {
+            nuevosErrores.confirmarContrasena = 'Confirma tu contraseña.';
+        } else if (contrasena !== confirmarContrasena) {
+            nuevosErrores.confirmarContrasena = 'Las contraseñas no coinciden.';
+        }
+
+        // Comprobar aceptación de condiciones
+        if (!aceptaCondiciones) {
+            nuevosErrores.condiciones = 'Debes aceptar los términos y la política de privacidad.';
+        }
+
+        setErrores(nuevosErrores);
+
+        // Comprobar si existe algún error
+        const hayErrores = Object.values(nuevosErrores).some(
+            mensaje => mensaje !== ''
+        );
+
+        if (hayErrores) {
+            return;
+        }
+
+        Alert.alert(
+            'Registro',
+            '¡Todos los datos son correctos! El registro está preparado.'
+        );
+    };
+
+    const limpiarErrores = () => {
+        setErrores({
+            nombre: '',
+            apellidos: '',
+            usuario: '',
+            correo: '',
+            contrasena: '',
+            confirmarContrasena: '',
+            condiciones: '',
+        });
+    };
 
     return (
         <View style={styles.contenedor}>
@@ -14,14 +129,17 @@ export default function AccountScreen() {
                 </Text>
             </View>
 
-            <View style={styles.contenido}>
+            <ScrollView contentContainerStyle={styles.contenido} showsVerticalScrollIndicator={false}>
                 <View style={styles.formulario}>
 
                     {/* Selector entre inicio de sesión y registro */}
                     <View style={styles.selector}>
                         <Pressable
                             style={modoRegistro ? styles.opcionInactiva : styles.opcionActiva}
-                            onPress={() => setModoRegistro(false)}
+                            onPress={() => {
+                                limpiarErrores();
+                                setModoRegistro(false);
+                            }}
                         >
                             <Text style={modoRegistro ? styles.textoInactivo : styles.textoActivo}>
                                 Iniciar sesión
@@ -30,7 +148,10 @@ export default function AccountScreen() {
 
                         <Pressable
                             style={modoRegistro ? styles.opcionActiva : styles.opcionInactiva}
-                            onPress={() => setModoRegistro(true)}
+                            onPress={() => {
+                                limpiarErrores();
+                                setModoRegistro(true);
+                            }}
                         >
                             <Text style={modoRegistro ? styles.textoActivo : styles.textoInactivo}>
                                 Registrarse
@@ -39,34 +160,168 @@ export default function AccountScreen() {
                     </View>
 
                     {/* Campos del inicio de sesión */}
-                    <Text style={styles.etiqueta}>
-                        Nombre de usuario o correo electrónico
-                    </Text>
+                    {modoRegistro ? (
+                        <>
+                            {/* Campos del registro */}
+                            <Text style={styles.etiqueta}>Nombre</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu nombre"
+                                value={nombre}
+                                onChangeText={setNombre}
+                            />
+                            {mostrarError(errores.nombre)}
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Introduce tu usuario o correo"
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                    />
+                            <Text style={styles.etiqueta}>Apellidos</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tus apellidos"
+                                value={apellidos}
+                                onChangeText={setApellidos}
+                            />
+                            {mostrarError(errores.apellidos)}
 
-                    <Text style={styles.etiqueta}>
-                        Contraseña
-                    </Text>
+                            <Text style={styles.etiqueta}>Nombre de usuario</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Elige un nombre de usuario"
+                                autoCapitalize="none"
+                                value={usuario}
+                                onChangeText={setUsuario}
+                            />
+                            {mostrarError(errores.usuario)}
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Introduce tu contraseña"
-                        secureTextEntry
-                    />
+                            <Text style={styles.etiqueta}>Correo electrónico</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu correo electrónico"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                                value={correo}
+                                onChangeText={setCorreo}
+                            />
+                            {mostrarError(errores.correo)}
 
-                    <Pressable style={styles.boton}>
-                        <Text style={styles.textoBoton}>
-                            Iniciar sesión
-                        </Text>
-                    </Pressable>
+                            <Text style={styles.etiqueta}>Contraseña</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Crea una contraseña"
+                                secureTextEntry
+                                value={contrasena}
+                                onChangeText={setContrasena}
+                            />
+                            {mostrarError(errores.contrasena)}
+
+                            <Text style={styles.etiqueta}>Confirmar contraseña</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Repite tu contraseña"
+                                secureTextEntry
+                                value={confirmarContrasena}
+                                onChangeText={setConfirmarContrasena}
+                            />
+                            {mostrarError(errores.confirmarContrasena)}
+
+                            <Text style={styles.etiqueta}>Teléfono (opcional)</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu teléfono"
+                                keyboardType="phone-pad"
+                            />
+
+                            <Text style={styles.etiqueta}>Nacionalidad (opcional)</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu nacionalidad"
+                            />
+
+                            <Text style={styles.etiqueta}>Dirección</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Calle y número"
+                            />
+
+                            <Text style={styles.etiqueta}>Código postal</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu código postal"
+                                keyboardType="numeric"
+                            />
+
+                            <Text style={styles.etiqueta}>Ciudad</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu ciudad"
+                            />
+
+                            <Text style={styles.etiqueta}>País</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu país"
+                            />
+
+                            {/* Aceptación de condiciones obligatoria */}
+                            <Pressable
+                                style={styles.filaCasilla}
+                                onPress={() => setAceptaCondiciones(!aceptaCondiciones)}
+                            >
+                                <View style={styles.casilla}>
+                                    {aceptaCondiciones && <Text style={styles.marcaCasilla}>✓</Text>}
+                                </View>
+                                <Text style={styles.textoCasilla}>
+                                    He leído y acepto los Términos y Condiciones y la Política de Privacidad.
+                                </Text>
+                            </Pressable>
+
+                            {/* Comunicaciones comerciales opcionales */}
+                            <Pressable
+                                style={styles.filaCasilla}
+                                onPress={() => setAceptaComunicaciones(!aceptaComunicaciones)}
+                            >
+                                <View style={styles.casilla}>
+                                    {aceptaComunicaciones && <Text style={styles.marcaCasilla}>✓</Text>}
+                                </View>
+                                <Text style={styles.textoCasilla}>
+                                    Deseo recibir novedades y comunicaciones comerciales.
+                                </Text>
+                            </Pressable>
+
+                            <Pressable
+                                style={styles.boton}
+                                onPress={validarRegistro}
+                            >
+                                <Text style={styles.textoBoton}>Crear cuenta</Text>
+                            </Pressable>
+                        </>
+                    ) : (
+                        <>
+                            {/* Campos del inicio de sesión */}
+                            <Text style={styles.etiqueta}>
+                                Nombre de usuario o correo electrónico
+                            </Text>
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu usuario o correo"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+
+                            <Text style={styles.etiqueta}>Contraseña</Text>
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Introduce tu contraseña"
+                                secureTextEntry
+                            />
+
+                            <Pressable style={styles.boton}>
+                                <Text style={styles.textoBoton}>Iniciar sesión</Text>
+                            </Pressable>
+                        </>
+                    )}
                 </View>
-            </View>
+            </ScrollView>
         </View>
     );
 }
@@ -88,7 +343,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     contenido: {
-        flex: 1,
+        flexGrow: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
         paddingHorizontal: 20,
@@ -158,5 +413,39 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    filaCasilla: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginBottom: 16,
+        gap: 10,
+    },
+    casilla: {
+        width: 22,
+        height: 22,
+        borderWidth: 1,
+        borderColor: 'red',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    marcaCasilla: {
+        color: 'red',
+        fontWeight: 'bold',
+    },
+    textoCasilla: {
+        flex: 1,
+        color: 'black',
+        fontSize: 14,
+    },
+    textoError: {
+        color: 'red',
+        fontSize: 13,
+        marginTop: -12,
+        marginBottom: 14,
+    },
+    inputError: {
+        borderColor: 'red',
+        borderWidth: 2,
     },
 });

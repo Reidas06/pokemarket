@@ -104,7 +104,7 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                     <ScrollView
                         style={styles.listaExpansiones}
                         nestedScrollEnabled={true}
-                        showsVerticalScrollIndicator={true}
+                        showsVerticalScrollIndicator={false}
                     >
                         {expansiones.map((expansion) => (
                             <Pressable
