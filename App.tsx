@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import CardDetailScreen from './screens/CardDetailScreen';
 import CartScreen from './screens/CartScreen';
 import BottomBar from './components/BottomBar';
 import AccountScreen from './screens/AccountScreen';
+import { supabase } from './src/services/supabase';
 
 
 type Pantalla = 'Inicio' | 'Colección' | 'Carrito' | 'Cuenta';
@@ -28,6 +29,22 @@ type ArticuloCarrito = {
 };
 
 export default function App() {
+  useEffect(() => {
+    async function probarConexion() {
+      const { error } = await supabase
+        .from('sets')
+        .select('id')
+        .limit(1);
+
+      if (error) {
+        console.log('Respuesta de Supabase:', error.message);
+      } else {
+        console.log('¡Conexión con Supabase correcta!');
+      }
+    }
+
+    probarConexion();
+  }, []);
 
   // Guarda la carta que el usuario pulsa para ver su detalle (null si estamos en la lista general)
   const [cartaSeleccionada, setCartaSeleccionada] = useState<Carta | null>(null);
