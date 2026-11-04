@@ -97,7 +97,7 @@ export default function CatalogScreen({ alSeleccionarCarta }: Props) {
                 nombre: carta.name,
                 precio: carta.selling_price,
                 descripcion: carta.description ?? '',
-                expansion: carta.sets?.[0]?.name ?? 'Sin expansión',
+                expansion: (carta.sets as any)?.name ?? 'Sin expansión',
                 numero: carta.collector_number,
                 imagen: carta.image_url,
             }));
