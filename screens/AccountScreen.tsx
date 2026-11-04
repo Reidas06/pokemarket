@@ -1,11 +1,15 @@
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 import Icon from '@expo/vector-icons/Ionicons';
+import { supabase } from '../src/services/supabase';
 
 export default function AccountScreen() {
 
     // Inicio de sesión    
     const [modoRegistro, setModoRegistro] = useState(false);
+
+    // Indica si hay una operación en curso con Supabase
+    const [cargando, setCargando] = useState(false);
 
     // Checkboxes 
     const [aceptaCondiciones, setAceptaCondiciones] = useState(false);
@@ -19,6 +23,10 @@ export default function AccountScreen() {
     const [contrasena, setContrasena] = useState('');
     const [confirmarContrasena, setConfirmarContrasena] = useState('');
 
+    // Datos del formulario de inicio de sesión
+    const [loginIdentificador, setLoginIdentificador] = useState('');
+    const [loginContrasena, setLoginContrasena] = useState('');
+
     // Errores de validación del formulario
     const [errores, setErrores] = useState({
         nombre: '',
@@ -28,6 +36,7 @@ export default function AccountScreen() {
         contrasena: '',
         confirmarContrasena: '',
         condiciones: '',
+        login: '',
     });
 
     const mostrarError = (mensaje: string) => {
@@ -40,7 +49,7 @@ export default function AccountScreen() {
         );
     };
 
-    const validarRegistro = () => {
+    const validarYRegistrar = async () => {
         const nuevosErrores = {
             nombre: '',
             apellidos: '',
@@ -49,6 +58,7 @@ export default function AccountScreen() {
             contrasena: '',
             confirmarContrasena: '',
             condiciones: '',
+            login: '',
         };
 
         // Comprobar campos obligatorios
@@ -94,20 +104,120 @@ export default function AccountScreen() {
 
         setErrores(nuevosErrores);
 
-        // Comprobar si existe algún error
-        const hayErrores = Object.values(nuevosErrores).some(
-            mensaje => mensaje !== ''
-        );
+        // Si hay algún error de validación, paramos aquí
+        const hayErrores = Object.values(nuevosErrores).some(msg => msg !== '');
+        if (hayErrores) return;
 
-        if (hayErrores) {
+        // Llamada a Supabase Auth
+        setCargando(true);
+
+        const { error } = await supabase.auth.signUp({
+            email: correo.trim(),
+            password: contrasena,
+            options: {
+                data: {
+                    // Estos datos quedan guardados en auth.users → raw_user_meta_data
+                    nombre: nombre.trim(),
+                    apellidos: apellidos.trim(),
+                    username: usuario.trim(),
+                    acepta_comunicaciones: aceptaComunicaciones,
+                },
+            },
+        });
+
+        setCargando(false);
+
+        if (error) {
+            // Supabase devuelve mensajes en inglés; los traducimos a los más comunes
+            if (error.message.includes('already registered') || error.message.includes('already exists')) {
+                setErrores(prev => ({ ...prev, correo: 'Este correo ya está registrado.' }));
+            } else {
+                Alert.alert('Error al registrarse', error.message);
+            }
             return;
         }
 
         Alert.alert(
-            'Registro',
-            '¡Todos los datos son correctos! El registro está preparado.'
+            '¡Cuenta creada!',
+            'Revisa tu correo electrónico para confirmar tu cuenta.',
+            [{ text: 'Aceptar', onPress: () => setModoRegistro(false) }]
         );
     };
+
+    // INICIO DE SESIÓN
+
+    const iniciarSesion = async () => {
+        const nuevosErrores = {
+            nombre: '',
+            apellidos: '',
+            usuario: '',
+            correo: '',
+            contrasena: '',
+            confirmarContrasena: '',
+            condiciones: '',
+            login: '',
+        };
+
+        if (!loginIdentificador.trim()) {
+            nuevosErrores.login = 'Introduce tu usuario o correo electrónico.';
+            setErrores(nuevosErrores);
+            return;
+        }
+
+        if (!loginContrasena) {
+            nuevosErrores.login = 'Introduce tu contraseña.';
+            setErrores(nuevosErrores);
+            return;
+        }
+
+        setCargando(true);
+
+        // Determinar si el identificador es un correo o un nombre de usuario
+        const formatoCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let emailParaLogin = loginIdentificador.trim();
+
+        if (!formatoCorreo.test(emailParaLogin)) {
+            // Es un nombre de usuario → buscamos el correo asociado en los metadatos
+            // Supabase no permite buscar directamente en auth.users desde el cliente,
+            // por lo que consultamos la tabla pública "profiles"
+            const { data: perfiles, error: errorBusqueda } = await supabase
+                .from('profiles')
+                .select('email')
+                .eq('username', emailParaLogin)
+                .limit(1);
+
+            if (errorBusqueda || !perfiles || perfiles.length === 0) {
+                setCargando(false);
+                setErrores(prev => ({ ...prev, login: 'No se ha encontrado ninguna cuenta con ese usuario.' }));
+                return;
+            }
+
+            emailParaLogin = perfiles[0].email;
+        }
+
+        // Login con email + contraseña
+        const { error } = await supabase.auth.signInWithPassword({
+            email: emailParaLogin,
+            password: loginContrasena,
+        });
+
+        setCargando(false);
+
+        if (error) {
+            if (error.message.includes('Invalid login credentials')) {
+                setErrores(prev => ({ ...prev, login: 'Usuario o contraseña incorrectos.' }));
+            } else if (error.message.includes('Email not confirmed')) {
+                setErrores(prev => ({ ...prev, login: 'Confirma tu correo antes de iniciar sesión.' }));
+            } else {
+                setErrores(prev => ({ ...prev, login: error.message }));
+            }
+            return;
+        }
+
+        Alert.alert('¡Bienvenido!', 'Has iniciado sesión correctamente.');
+    };
+
+    // LIMPIEZA
 
     const limpiarErrores = () => {
         setErrores({
@@ -118,6 +228,7 @@ export default function AccountScreen() {
             contrasena: '',
             confirmarContrasena: '',
             condiciones: '',
+            login: '',
         });
     };
 
@@ -159,10 +270,9 @@ export default function AccountScreen() {
                         </Pressable>
                     </View>
 
-                    {/* Campos del inicio de sesión */}
+                    {/* REGISTRO */}
                     {modoRegistro ? (
                         <>
-                            {/* Campos del registro */}
                             <Text style={styles.etiqueta}>Nombre</Text>
                             <TextInput
                                 style={styles.input}
@@ -272,6 +382,7 @@ export default function AccountScreen() {
                                     He leído y acepto los Términos y Condiciones y la Política de Privacidad.
                                 </Text>
                             </Pressable>
+                            {mostrarError(errores.condiciones)}
 
                             {/* Comunicaciones comerciales opcionales */}
                             <Pressable
@@ -287,15 +398,19 @@ export default function AccountScreen() {
                             </Pressable>
 
                             <Pressable
-                                style={styles.boton}
-                                onPress={validarRegistro}
+                                style={[styles.boton, cargando && styles.botonDesactivado]}
+                                onPress={validarYRegistrar}
+                                disabled={cargando}
                             >
-                                <Text style={styles.textoBoton}>Crear cuenta</Text>
+                                {cargando
+                                    ? <ActivityIndicator color="white" />
+                                    : <Text style={styles.textoBoton}>Crear cuenta</Text>
+                                }
                             </Pressable>
                         </>
                     ) : (
+                        /* INICIO DE SESIÓN */
                         <>
-                            {/* Campos del inicio de sesión */}
                             <Text style={styles.etiqueta}>
                                 Nombre de usuario o correo electrónico
                             </Text>
@@ -303,8 +418,9 @@ export default function AccountScreen() {
                             <TextInput
                                 style={styles.input}
                                 placeholder="Introduce tu usuario o correo"
-                                keyboardType="email-address"
                                 autoCapitalize="none"
+                                value={loginIdentificador}
+                                onChangeText={setLoginIdentificador}
                             />
 
                             <Text style={styles.etiqueta}>Contraseña</Text>
@@ -313,10 +429,21 @@ export default function AccountScreen() {
                                 style={styles.input}
                                 placeholder="Introduce tu contraseña"
                                 secureTextEntry
+                                value={loginContrasena}
+                                onChangeText={setLoginContrasena}
                             />
 
-                            <Pressable style={styles.boton}>
-                                <Text style={styles.textoBoton}>Iniciar sesión</Text>
+                            {mostrarError(errores.login)}
+
+                            <Pressable
+                                style={[styles.boton, cargando && styles.botonDesactivado]}
+                                onPress={iniciarSesion}
+                                disabled={cargando}
+                            >
+                                {cargando
+                                    ? <ActivityIndicator color="white" />
+                                    : <Text style={styles.textoBoton}>Iniciar sesión</Text>
+                                }
                             </Pressable>
                         </>
                     )}
@@ -408,6 +535,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 24,
         marginTop: 4,
+    },
+    botonDesactivado: {
+        backgroundColor: '#CCCCCC',
     },
     textoBoton: {
         color: 'white',
