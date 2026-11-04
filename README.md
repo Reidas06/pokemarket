@@ -1,297 +1,478 @@
-# PokéMarket
+# 🎴 PokéMarket
 
-Aplicación móvil desarrollada con **React Native** y **Expo** para la exploración, consulta y compra simulada de cartas coleccionables Pokémon. La aplicación implementa navegación personalizada sin dependencias externas pesadas, filtrado reactivo en tiempo real, persistencia en memoria del carrito de compras y animaciones fluidas con la API nativa de React Native.
-
----
-
-## Índice
-
-1. [Arquitectura y Modelado de Datos](#arquitectura-y-modelado-de-datos)
-2. [Funcionalidades Principales](#funcionalidades-principales)
-   - [Catálogo y Búsqueda en Tiempo Real](#1-catálogo-y-búsqueda-en-tiempo-real)
-   - [Detalle de Carta y Notificación Animada (Popup)](#2-detalle-de-carta-y-notificación-animada-popup)
-   - [Gestión Integral del Carrito](#3-gestión-integral-del-carrito)
-   - [Barra de Navegación Inferior Dinámica](#4-barra-de-navegación-inferior-dinámica)
-3. [Implementaciones Técnicas Destacadas](#implementaciones-técnicas-destacadas)
-   - [Animación del Popup (Animated API + Modal)](#implementación-técnica-popup-animado-con-animated-y-modal)
-   - [Lógica de Control del Carrito y Totales](#lógica-de-control-del-carrito-y-totales-con-reduce)
-4. [Estructura del Proyecto](#estructura-del-proyecto)
-5. [Tecnologías Utilizadas](#tecnologías-utilizadas)
-6. [Instalación y Puesta en Funcionamiento](#instalación-y-puesta-en-funcionamiento)
-7. [Formato de Datos de las Cartas](#formato-de-datos-de-las-cartas)
+> Aplicación móvil de compraventa de cartas Pokémon TCG desarrollada con **React Native + Expo** y backend en **Supabase**.
 
 ---
 
-## Arquitectura y Modelado de Datos
+## 📋 Índice
 
-El proyecto se basa en una arquitectura de estado centralizado en `App.tsx`, siguiendo el flujo unidireccional de datos de React:
+1. [Descripción General](#-descripción-general)
+2. [Tecnologías Utilizadas](#-tecnologías-utilizadas)
+3. [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
+4. [Integración con Supabase](#-integración-con-supabase)
+   - [Configuración del Cliente](#configuración-del-cliente)
+   - [Esquema de Base de Datos](#esquema-de-base-de-datos)
+   - [Autenticación de Usuarios](#autenticación-de-usuarios)
+   - [Trigger Automático de Perfiles](#trigger-automático-de-perfiles)
+5. [Funcionalidades Principales](#-funcionalidades-principales)
+   - [Catálogo con Filtros](#1-catálogo-con-filtros)
+   - [Detalle de Carta](#2-detalle-de-carta)
+   - [Carrito de Compra](#3-carrito-de-compra)
+   - [Sistema de Cuentas](#4-sistema-de-cuentas)
+6. [Implementaciones Técnicas Destacadas](#-implementaciones-técnicas-destacadas)
+7. [Estructura del Proyecto](#-estructura-del-proyecto)
+8. [Instalación y Puesta en Marcha](#-instalación-y-puesta-en-marcha)
+9. [Variables de Entorno](#-variables-de-entorno)
 
-* **Estado de navegación (`pantallaActual`)**: Controla qué pantalla principal se renderiza (`'Inicio'`, `'Colección'`, `'Carrito'`, `'Cuenta'`).
-* **Estado de selección (`cartaSeleccionada`)**: Permite abrir y cerrar la vista detallada de una carta (`Carta | null`).
-* **Estado del carrito (`carrito`)**: Lista de artículos agregados (`ArticuloCarrito[]`), vinculando cada carta con su número de unidades seleccionadas.
+---
+
+## 🧩 Descripción General
+
+**PokéMarket** es una aplicación móvil multiplataforma (Android / iOS) que permite explorar un catálogo de cartas Pokémon TCG, ver el detalle de cada carta, gestionar un carrito de compra y registrarse o iniciar sesión con una cuenta de usuario.
+
+El catálogo y los datos de usuario se almacenan y gestionan en **Supabase** (PostgreSQL en la nube), mientras que la interfaz está construida enteramente con componentes nativos de **React Native** sin librerías de navegación de terceros.
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+| Tecnología | Versión | Propósito |
+|---|---|---|
+| **Expo SDK** | ~57.0.27 | Plataforma de desarrollo y build para React Native |
+| **React** | 19.2.3 | Gestión declarativa de interfaces y estado |
+| **React Native** | 0.86.3 | Framework de UI nativa multiplataforma |
+| **TypeScript** | ~6.0.3 | Tipado estático para mayor robustez |
+| **Supabase JS** | ^2.118.0 | Cliente para base de datos, auth y API REST |
+| **react-native-safe-area-context** | ~5.7.0 | Adaptación a notches y barras del sistema |
+| **@expo/vector-icons** | ^15.0.2 | Iconografía vectorial (Ionicons) |
+
+---
+
+## 🏗️ Arquitectura del Proyecto
+
+El estado global vive en `App.tsx` y fluye hacia abajo mediante props siguiendo el patrón unidireccional de React:
+
+```
+App.tsx  (estado global: carta seleccionada, carrito, pantalla activa)
+├── CatalogScreen    ← carga cartas de Supabase, filtros, paginación
+├── CardDetailScreen ← detalle + añadir al carrito
+├── CartScreen       ← gestión de unidades y totales
+├── AccountScreen    ← registro e inicio de sesión con Supabase Auth
+└── BottomBar        ← navegación entre pestañas
+```
 
 ### Tipos TypeScript principales
 
 ```typescript
-// Modelo representativo de cada carta Pokémon
-type Carta = {
+// src/types/card.ts
+
+export type Carta = {
   id: string;
   nombre: string;
-  precio: number;
+  precio: number | null;
   descripcion: string;
-  expansion: string;
+  expansion: string;   // nombre del set, obtenido por JOIN con la tabla sets
   numero: string;
-  imagen: string;
+  imagen: string | null;
 };
 
-// Elemento individual dentro de la cesta de la compra
-type ArticuloCarrito = {
+export type ArticuloCarrito = {
   carta: Carta;
   cantidad: number;
 };
-
-// Rutas disponibles en la barra inferior
-type Pantalla = 'Inicio' | 'Colección' | 'Carrito' | 'Cuenta';
 ```
 
 ---
 
-## Funcionalidades Principales
+## ☁️ Integración con Supabase
 
-### 1. Catálogo y Búsqueda en Tiempo Real
-* **Grid interactivo**: Muestra las cartas cargadas desde `data/cartas.json` con su imagen oficial, nombre, precio formateado en euros, expansión y número de serie.
-* **Filtro multicampo en vivo**: Al escribir en el buscador, se filtran las cartas instantáneamente evaluando coincidencias tanto en el nombre como en la descripción (`.toLowerCase()` para asegurar insensibilidad a mayúsculas/minúsculas).
-* **Feedback de búsqueda vacía**: Si ninguna carta coincide con el texto ingresado, se despliega un mensaje amigable indicándolo.
-* **Scroll optimizado**: La lista se renderiza con `showsVerticalScrollIndicator={false}` para mantener una interfaz limpia y moderna.
+### Configuración del Cliente
 
-### 2. Detalle de Carta y Notificación Animada (Popup)
-* Al seleccionar una carta del catálogo, se muestra una pantalla con su imagen ampliada y ficha técnica completa.
-* **Botón Añadir al Carrito**: Comunica con el estado global para añadir el artículo. Si el artículo ya existía en la cesta, incrementa su contador en vez de crear una fila duplicada.
-* **Notificación emergente no intrusiva**: Un aviso flotante animado confirma la adición exitosa sin necesidad de cambiar de pantalla ni interrumpir la navegación.
-* **Retorno fluido**: Botón directo para regresar al catálogo conservando la posición y la búsqueda anterior.
+El cliente de Supabase se inicializa una sola vez en `src/services/supabase.ts` y se importa desde cualquier pantalla que necesite datos:
 
-### 3. Gestión Integral del Carrito
-* **Cálculo de totales en tiempo real**: La cabecera calcula automáticamente el total de artículos y el precio final acumulado mediante el método `.reduce()`.
-* **Controles de cantidad (+ / −)**: Cada tarjeta del carrito cuenta con botones interactivos para sumar o restar unidades de manera inmediata.
-* **Auto-eliminación por umbral**: Si las unidades de un artículo bajan a `0`, se descarta automáticamente del carrito.
-* **Eliminación con confirmación nativa**: El botón de papelera ejecuta `Alert.alert()`, solicitando confirmación del usuario para evitar borrados accidentales.
-* **Estado de carrito vacío**: Si no hay cartas añadidas, se visualiza una vista con diseño especial informando al usuario y animándole a explorar el catálogo.
+```typescript
+// src/services/supabase.ts
+import { createClient } from '@supabase/supabase-js';
 
-### 4. Barra de Navegación Inferior Dinámica
-* Componente modular (`BottomBar.tsx`) anclado en la parte inferior.
-* Mapeo dinámico de las 4 rutas principales con iconos vectoriales de `@expo/vector-icons/Ionicons`.
-* Resaltado visual en color rojo y tipografía en negrita para la sección actualmente activa.
-* **Reseteo inteligente**: Al pulsar sobre "Inicio" cuando se está visualizando el detalle de una carta, se cierra el detalle automáticamente volviendo al catálogo general.
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
+const supabasePublishableKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+
+export const supabase = createClient(supabaseUrl, supabasePublishableKey);
+```
+
+Las credenciales se leen de variables de entorno con el prefijo `EXPO_PUBLIC_` para que Expo las exponga de forma segura en el cliente.
 
 ---
 
-## Implementaciones Técnicas Destacadas
+### Esquema de Base de Datos
 
-### Implementación Técnica: Popup Animado con `Animated` y `Modal`
+El proyecto utiliza dos tablas principales en Supabase:
 
-Para brindar una experiencia de usuario (UX) pulida al añadir una carta al carrito, se utiliza la API nativa `Animated` de React Native combinada con un `Modal`.
+#### Tabla `sets` — Expansiones Pokémon TCG
+```sql
+CREATE TABLE public.sets (
+  id   TEXT PRIMARY KEY,
+  name TEXT NOT NULL
+);
+```
 
-#### 1. Lógica de la animación encadenada (`CardDetailScreen.tsx`):
+#### Tabla `cards` — Cartas del catálogo
+```sql
+CREATE TABLE public.cards (
+  id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name             TEXT NOT NULL,
+  description      TEXT,
+  collector_number TEXT,
+  image_url        TEXT,
+  selling_price    NUMERIC(10, 2),
+  is_active        BOOLEAN DEFAULT true,
+  set_id           TEXT REFERENCES public.sets(id)
+);
+```
+
+#### Tabla `profiles` — Datos públicos de usuario
+```sql
+CREATE TABLE public.profiles (
+  id        UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  username  TEXT UNIQUE NOT NULL,
+  email     TEXT NOT NULL,
+  nombre    TEXT,
+  apellidos TEXT,
+  creado_en TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+---
+
+### Autenticación de Usuarios
+
+Se usa **Supabase Auth** (sistema nativo) que gestiona contraseñas hasheadas, sesiones JWT y confirmación por email de forma automática.
+
+#### Registro de nueva cuenta
+```typescript
+const { data, error } = await supabase.auth.signUp({
+  email: correo.trim(),
+  password: contrasena,
+  options: {
+    data: {
+      // Se guardan en auth.users → raw_user_meta_data
+      // y el trigger los copia automáticamente a la tabla profiles
+      nombre: nombre.trim(),
+      apellidos: apellidos.trim(),
+      username: usuario.trim(),
+      acepta_comunicaciones: aceptaComunicaciones,
+    },
+  },
+});
+```
+
+#### Inicio de sesión (con email o nombre de usuario)
+```typescript
+// Si el identificador no es un email, buscamos el email por username en profiles
+const { data: perfiles } = await supabase
+  .from('profiles')
+  .select('email')
+  .eq('username', identificador)
+  .limit(1);
+
+const emailFinal = esEmail ? identificador : perfiles[0].email;
+
+// Login estándar con email + contraseña
+const { error } = await supabase.auth.signInWithPassword({
+  email: emailFinal,
+  password: contrasena,
+});
+```
+
+---
+
+### Trigger Automático de Perfiles
+
+Cuando un usuario se registra, un **trigger de PostgreSQL** copia automáticamente sus datos a la tabla pública `profiles` sin necesidad de hacer una segunda llamada desde la app:
+
+```sql
+-- Función que se ejecuta en cada nuevo registro
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, username, email, nombre, apellidos)
+  VALUES (
+    NEW.id,
+    COALESCE(
+      NEW.raw_user_meta_data->>'username',
+      'usuario_' || substring(NEW.id::text, 1, 8)
+    ),
+    NEW.email,
+    NEW.raw_user_meta_data->>'nombre',
+    NEW.raw_user_meta_data->>'apellidos'
+  )
+  ON CONFLICT (id) DO NOTHING;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+-- Trigger que llama a la función tras cada INSERT en auth.users
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+```
+
+**Flujo completo del registro:**
+```
+App → supabase.auth.signUp()
+         ↓
+   INSERT en auth.users  ──→  Trigger se dispara
+         ↓                           ↓
+   Sesión creada          INSERT automático en profiles
+                          (username, email, nombre, apellidos)
+```
+
+#### Permisos con Row Level Security (RLS)
+```sql
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- Lectura pública (necesario para buscar email por username en el login)
+CREATE POLICY "Lectura pública de perfiles"
+  ON public.profiles FOR SELECT USING (true);
+
+-- Solo el propio usuario puede editar su perfil
+CREATE POLICY "Edición propia del perfil"
+  ON public.profiles FOR UPDATE USING (auth.uid() = id);
+```
+
+---
+
+## ✨ Funcionalidades Principales
+
+### 1. Catálogo con Filtros
+
+Las cartas se cargan desde Supabase con un JOIN a la tabla `sets` para obtener el nombre de la expansión:
 
 ```typescript
-const escala = useRef(new Animated.Value(0.8)).current;
+const { data, error } = await supabase
+  .from('cards')
+  .select(`
+    id,
+    name,
+    description,
+    collector_number,
+    image_url,
+    selling_price,
+    sets (
+      name
+    )
+  `)
+  .eq('is_active', true)
+  .order('collector_number');
+
+// La relación many-to-one devuelve sets como objeto, no como array
+const cartasAdaptadas: Carta[] = data.map((carta) => ({
+  id: carta.id,
+  nombre: carta.name,
+  precio: carta.selling_price,
+  descripcion: carta.description ?? '',
+  expansion: (carta.sets as any)?.name ?? 'Sin expansión',
+  numero: carta.collector_number,
+  imagen: carta.image_url,
+}));
+```
+
+> **Nota importante:** Supabase devuelve relaciones many-to-one como un objeto `{}`, no como un array `[]`. Usar `sets?.[0]?.name` daría siempre `undefined`.
+
+- **Búsqueda en tiempo real** por nombre y descripción (insensible a mayúsculas).
+- **Selector de expansión** con desplegable animado construido con componentes nativos.
+- **Paginación** de 6 cartas por página con scroll automático al cambiar de página.
+
+---
+
+### 2. Detalle de Carta
+
+- Imagen ampliada, nombre, expansión, número de colección y precio formateado en euros.
+- Botón **Añadir al carrito** con popup animado de confirmación usando `Animated API` + `Modal`.
+
+```typescript
+// Popup de confirmación animado
 const opacidad = useRef(new Animated.Value(0)).current;
+const escala   = useRef(new Animated.Value(0.8)).current;
 
-const mostrarPopup = () => {
-    setPopupVisible(true);
-
-    // Valores iniciales
-    escala.setValue(0.8);
-    opacidad.setValue(0);
-
-    Animated.sequence([
-        // 1. Entrada con efecto resorte (spring) y desvanecimiento
-        Animated.parallel([
-            Animated.spring(escala, {
-                toValue: 1,
-                friction: 6,
-                useNativeDriver: true,
-            }),
-            Animated.timing(opacidad, {
-                toValue: 1,
-                duration: 200,
-                useNativeDriver: true,
-            }),
-        ]),
-        // 2. Pausa visible durante 1.6 segundos
-        Animated.delay(400),
-        // 3. Salida suave desvaneciéndose
-        Animated.parallel([
-            Animated.timing(escala, {
-                toValue: 0.85,
-                duration: 120,
-                useNativeDriver: true,
-            }),
-            Animated.timing(opacidad, {
-                toValue: 0,
-                duration: 120,
-                useNativeDriver: true,
-            }),
-        ]),
-    ]).start(({ finished }) => {
-        if (finished) {
-            setPopupVisible(false);
-        }
-    });
-};
-```
-
-#### 2. Renderizado del Modal con `Animated.View`:
-
-```tsx
-<Modal
-    transparent
-    visible={popupVisible}
-    animationType="none"
-    statusBarTranslucent
-    onRequestClose={() => setPopupVisible(false)}
->
-    <View style={styles.fondoPopup}>
-        <Animated.View
-            style={[
-                styles.tarjetaPopup,
-                {
-                    opacity: opacidad,
-                    transform: [{ scale: escala }],
-                },
-            ]}
-        >
-            <View style={styles.iconoPopup}>
-                <Text style={styles.checkPopup}>✓</Text>
-            </View>
-            <Text style={styles.tituloPopup}>¡Añadida al carrito!</Text>
-            <Text style={styles.textoPopup}>
-                {carta.nombre} se ha añadido correctamente.
-            </Text>
-        </Animated.View>
-    </View>
-</Modal>
+Animated.parallel([
+  Animated.timing(opacidad, { toValue: 1, duration: 250, useNativeDriver: true }),
+  Animated.spring(escala,   { toValue: 1, useNativeDriver: true }),
+]).start();
 ```
 
 ---
 
-### Lógica de Control del Carrito y Totales con `reduce`
+### 3. Carrito de Compra
 
-#### Actualización inmutable sin duplicados (`App.tsx`):
+- **Sin duplicados**: si la carta ya está en el carrito se incrementa su cantidad.
+- **Controles +/−**: ajuste de unidades; al llegar a 0 la carta se elimina automáticamente.
+- **Total en tiempo real** calculado con `reduce`:
 
 ```typescript
-alAñadirCarrito={(carta) => {
-  setCarrito((carritoActual) => {
-    const articuloExistente = carritoActual.find(
-      (articulo) => articulo.carta.id === carta.id
-    );
+// Total de artículos y precio acumulado
+const totalArticulos = carrito.reduce((acc, art) => acc + art.cantidad, 0);
+const totalPrecio    = carrito.reduce(
+  (acc, art) => acc + (art.carta.precio ?? 0) * art.cantidad, 0
+);
+```
 
-    // Si ya existe, incrementamos cantidad
-    if (articuloExistente) {
-      return carritoActual.map((articulo) =>
-        articulo.carta.id === carta.id
-          ? { ...articulo, cantidad: articulo.cantidad + 1 }
-          : articulo
+- **Eliminación con confirmación nativa** mediante `Alert.alert()`.
+
+---
+
+### 4. Sistema de Cuentas
+
+Formulario con dos modos (selector tipo tab) gestionado con un único estado booleano `modoRegistro`:
+
+| Modo | Campos | Acción |
+|---|---|---|
+| **Registro** | Nombre, Apellidos, Usuario, Email, Contraseña ×2, Teléfono, Dirección, Checkboxes | `supabase.auth.signUp()` |
+| **Login** | Usuario o Email, Contraseña | `supabase.auth.signInWithPassword()` |
+
+- Validación local de todos los campos antes de llamar a Supabase.
+- Spinner `ActivityIndicator` mientras espera respuesta.
+- Mensajes de error traducidos al español (ej: `"Invalid login credentials"` → `"Usuario o contraseña incorrectos"`).
+
+---
+
+## 🔬 Implementaciones Técnicas Destacadas
+
+### Inmutabilidad del carrito
+
+La actualización del carrito nunca muta el array original; devuelve siempre un nuevo array:
+
+```typescript
+// En App.tsx
+const alAñadirCarrito = (carta: Carta) => {
+  setCarrito((carritoActual) => {
+    const existe = carritoActual.find((art) => art.carta.id === carta.id);
+
+    if (existe) {
+      // La carta ya estaba: incrementamos cantidad
+      return carritoActual.map((art) =>
+        art.carta.id === carta.id
+          ? { ...art, cantidad: art.cantidad + 1 }
+          : art
       );
     }
 
-    // Si es nuevo, lo añadimos con cantidad inicial de 1
+    // Nueva carta: la añadimos con cantidad 1
     return [...carritoActual, { carta, cantidad: 1 }];
   });
-}}
+};
 ```
 
-#### Cálculo acumulativo dinámico (`CartScreen.tsx`):
+### Navegación sin librería externa
 
-```tsx
-<Text style={styles.subtitulo}>
-  {carrito.reduce((total, articulo) => total + articulo.cantidad, 0)} artículos · 
-  {carrito
-    .reduce((total, articulo) => total + articulo.carta.precio * articulo.cantidad, 0)
-    .toFixed(2)
-    .replace('.', ',')} €
-</Text>
+La navegación entre pantallas se implementa con renderizado condicional, eliminando la dependencia de React Navigation para mantener la app ligera:
+
+```typescript
+// App.tsx — enrutador condicional
+{pantallaActual === 'Carrito' ? (
+  <CartScreen ... />
+) : pantallaActual === 'Cuenta' ? (
+  <AccountScreen />
+) : cartaSeleccionada === null ? (
+  <CatalogScreen ... />
+) : (
+  <CardDetailScreen ... />
+)}
 ```
 
 ---
 
-## Estructura del Proyecto
+## 📁 Estructura del Proyecto
 
 ```
 pokemarket/
-├── App.tsx                        # Componente raíz: gestor de estados globales y enrutador condicional
+├── App.tsx                        # Raíz: estado global y enrutador condicional
+├── index.ts                       # Punto de entrada de Expo
 ├── app.json                       # Metadatos y configuración de Expo
-├── package.json                   # Dependencias y scripts de ejecución
-├── tsconfig.json                  # Configuración del compilador TypeScript
-├── components/
-│   └── BottomBar.tsx              # Barra inferior fija de navegación con Ionicons
+├── package.json                   # Dependencias y scripts
+├── tsconfig.json                  # Configuración TypeScript
+├── .env                           # Variables de entorno (NO subir a git)
+│
+├── src/
+│   ├── services/
+│   │   └── supabase.ts            # Inicialización del cliente Supabase
+│   └── types/
+│       └── card.ts                # Tipos TypeScript: Carta, ArticuloCarrito
+│
 ├── screens/
-│   ├── CatalogScreen.tsx          # Catálogo con buscador en tiempo real y listado de cartas
-│   ├── CardDetailScreen.tsx       # Ficha de detalle, botón de compra y notificación animada
-│   └── CartScreen.tsx             # Carrito con control de unidades, totales y confirmación de borrado
-└── data/
-    └── cartas.json                # Fichero JSON local con el catálogo de cartas Pokémon
+│   ├── CatalogScreen.tsx          # Catálogo con búsqueda, expansiones y paginación
+│   ├── CardDetailScreen.tsx       # Detalle de carta + popup animado
+│   ├── CartScreen.tsx             # Carrito con totales y confirmación de borrado
+│   └── AccountScreen.tsx          # Registro e inicio de sesión con Supabase Auth
+│
+├── components/
+│   └── BottomBar.tsx              # Barra inferior de navegación con Ionicons
+│
+└── assets/                        # Iconos e imágenes estáticas de la app
 ```
 
 ---
 
-## Tecnologías Utilizadas
+## 🚀 Instalación y Puesta en Marcha
 
-| Tecnología | Versión | Propósito |
-|---|---|---|
-| **Expo SDK** | ~57.0.27 | Plataforma y herramientas de desarrollo para React Native |
-| **React** | 19.2.3 | Biblioteca base para la gestión declarativa de interfaces y estados |
-| **React Native** | 0.86.3 | Framework para aplicaciones móviles nativas multiplataforma |
-| **TypeScript** | ~6.0.3 | Tipado estático para mayor robustez y prevención de errores |
-| **react-native-safe-area-context** | ~5.7.0 | Adaptación a bordes, barras de estado y *notches* de dispositivos |
-| **@expo/vector-icons** | ^15.0.2 | Iconografía vectorial nativa (*Ionicons*) |
+### Requisitos previos
 
----
+- **Node.js** 18 o superior
+- **npm** 9 o superior
+- App **Expo Go** en tu dispositivo móvil (Android / iOS) o un emulador configurado
+- Proyecto creado en [supabase.com](https://supabase.com) con las tablas del esquema
 
-## Instalación y Puesta en Funcionamiento
-
-### 1. Requisitos previos
-* **Node.js** 18 o superior.
-* **npm** 9 o superior.
-* Aplicación **Expo Go** instalada en tu dispositivo móvil (Android / iOS) o un emulador configurado.
-
-### 2. Clonación e instalación
+### 1. Clonar e instalar dependencias
 
 ```bash
-# Clonar el repositorio
 git clone <url-del-repositorio>
 cd pokemarket
-
-# Instalar dependencias
 npm install
 ```
 
-### 3. Iniciar el entorno de desarrollo
+### 2. Configurar las variables de entorno
+
+```bash
+# Crea el fichero .env en la raíz del proyecto
+cp .env.example .env   # o créalo manualmente
+```
+
+Edita `.env` con tus credenciales de Supabase (ver sección siguiente).
+
+### 3. Iniciar el servidor de desarrollo
 
 ```bash
 npx expo start
 ```
 
-* **Dispositivo físico**: Abre Expo Go en tu teléfono y escanea el código QR mostrado en la terminal.
-* **Emulador Android**: Pulsa la tecla `a` en la terminal (requiere Android Studio).
-* **Simulador iOS**: Pulsa la tecla `i` en la terminal (requiere macOS y Xcode).
+| Dispositivo | Instrucción |
+|---|---|
+| **Físico** | Abre Expo Go y escanea el QR de la terminal |
+| **Emulador Android** | Pulsa `a` en la terminal (requiere Android Studio) |
+| **Simulador iOS** | Pulsa `i` en la terminal (requiere macOS + Xcode) |
 
 ---
 
-## Formato de Datos de las Cartas
+## 🔐 Variables de Entorno
 
-El archivo `data/cartas.json` almacena el catálogo de cartas. Cada objeto cumple con la estructura:
+Crea un fichero `.env` en la raíz del proyecto con estas variables. Encuéntralas en tu proyecto de Supabase bajo **Project Settings → API**:
 
-```json
-{
-  "id": "1",
-  "nombre": "Charizard ex",
-  "precio": 89.99,
-  "descripcion": "Carta holográfica de Charizard ex con acabado brillante y gran poder de ataque.",
-  "expansion": "151",
-  "numero": "199/165",
-  "imagen": "https://images.pokemontcg.io/sv3pt5/199_hires.png"
-}
+```env
+EXPO_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
-Para incorporar nuevas cartas a la tienda, simplemente añade un nuevo objeto respetando este formato dentro del array en `data/cartas.json`.
+> ⚠️ **Nunca subas el fichero `.env` a un repositorio público.** Asegúrate de que está en `.gitignore`.
+
+El prefijo `EXPO_PUBLIC_` es obligatorio para que Expo exponga la variable en el bundle del cliente de forma segura.
+
+---
+
+## 📝 Notas de Desarrollo
+
+- **Email rate limit**: Supabase limita a **2 emails/hora** en el plan gratuito. Para desarrollo, desactiva la confirmación por email en **Authentication → Providers → Email → Confirm email: OFF**.
+- **Confirmación manual**: Para confirmar usuarios existentes sin esperar email, ejecuta en el SQL Editor de Supabase:
+  ```sql
+  UPDATE auth.users SET email_confirmed_at = NOW() WHERE email_confirmed_at IS NULL;
+  ```
+- **SMTP propio**: Para producción, configura un servidor SMTP externo (Resend, Mailgun, etc.) en **Authentication → Settings → SMTP** para eliminar el límite de emails.
