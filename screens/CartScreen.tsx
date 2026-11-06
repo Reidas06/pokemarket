@@ -31,6 +31,15 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
         });
     };
 
+    // Al restar unidades: si la cantidad actual es 1 o menos, pedimos confirmación antes de borrar
+    const decrementarCantidad = (id: string, nombre: string, cantidadActual: number) => {
+        if (cantidadActual <= 1) {
+            confirmarEliminacion(id, nombre);
+        } else {
+            alCambiarCantidad(id, -1);
+        }
+    };
+
 
     return (
         <View style={styles.contenedor}>
@@ -119,7 +128,7 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
 
                                     <Pressable
                                         style={[styles.botonCantidad, styles.botonMenos]}
-                                        onPress={() => alCambiarCantidad(articulo.carta.id, -1)}
+                                        onPress={() => decrementarCantidad(articulo.carta.id, articulo.carta.nombre, articulo.cantidad)}
                                     >
                                         <Text style={styles.textoCantidad}>−</Text>
                                     </Pressable>

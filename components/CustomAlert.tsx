@@ -56,9 +56,9 @@ export default function CustomAlert({
             case 'exito':
                 return { nombre: 'checkmark-circle-outline' as const, color: '#2E7D32', fondo: '#E8F5E9' };
             case 'error':
-                return { nombre: 'close-circle-outline' as const, color: '#D32F2F', fondo: '#FFEBEE' };
+                return { nombre: 'close-circle-outline' as const, color: 'red', fondo: '#FFEBEE' };
             case 'peligro':
-                return { nombre: 'trash-outline' as const, color: '#D32F2F', fondo: '#FFEBEE' };
+                return { nombre: 'trash-outline' as const, color: 'red', fondo: '#FFEBEE' };
             default:
                 return { nombre: 'information-circle-outline' as const, color: 'red', fondo: '#FCE8E8' };
         }
