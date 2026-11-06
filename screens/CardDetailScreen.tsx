@@ -16,6 +16,15 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
 
     const escala = useRef(new Animated.Value(0.8)).current;
     const opacidad = useRef(new Animated.Value(0)).current;
+    const animacionPopupRef = useRef<Animated.CompositeAnimation | null>(null);
+
+    // Cierra el popup inmediatamente si el usuario toca fuera
+    const cerrarPopup = () => {
+        if (animacionPopupRef.current) {
+            animacionPopupRef.current.stop();
+        }
+        setPopupVisible(false);
+    };
 
     //Animación do popup das compras de cartas
     const mostrarPopup = () => {
@@ -24,7 +33,11 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
         escala.setValue(0.8);
         opacidad.setValue(0);
 
-        Animated.sequence([
+        if (animacionPopupRef.current) {
+            animacionPopupRef.current.stop();
+        }
+
+        const anim = Animated.sequence([
             Animated.parallel([
                 Animated.spring(escala, {
                     toValue: 1,
@@ -37,19 +50,23 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                     useNativeDriver: true,
                 }),
             ]),
-            Animated.delay(400),
+            Animated.delay(1000),
             Animated.parallel([
                 Animated.timing(escala, {
                     toValue: 0.85,
-                    duration: 120,
+                    duration: 140,
                     useNativeDriver: true,
                 }), Animated.timing(opacidad, {
                     toValue: 0,
-                    duration: 120,
+                    duration: 140,
                     useNativeDriver: true,
                 }),
             ]),
-        ]).start(({ finished }) => {
+        ]);
+
+        animacionPopupRef.current = anim;
+
+        anim.start(({ finished }) => {
             if (finished) {
                 setPopupVisible(false);
             }
@@ -125,9 +142,15 @@ export default function CardDetailScreen({ carta, volver, alAñadirCarrito }: Pr
                 visible={popupVisible}
                 animationType="none"
                 statusBarTranslucent
-                onRequestClose={() => setPopupVisible(false)}>
+                onRequestClose={cerrarPopup}>
 
                 <View style={styles.fondoPopup}>
+                    {/* Al tocar en cualquier parte que no sea el recuadro, se cierra inmediatamente */}
+                    <Pressable
+                        style={styles.fondoClicable}
+                        onPress={cerrarPopup}
+                    />
+
                     <Animated.View
                         style={[
                             styles.tarjetaPopup,

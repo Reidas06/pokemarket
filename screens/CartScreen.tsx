@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View, Image, ScrollView, Alert, Pressable } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, Pressable } from "react-native";
+import { useState } from "react";
 import { Carta, ArticuloCarrito } from '../src/types/card';
 import Icon from '@expo/vector-icons/Ionicons';
+import CustomAlert from '../components/CustomAlert';
 
 type Props = {
     carrito: ArticuloCarrito[]
@@ -10,23 +12,24 @@ type Props = {
 
 export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad }: Props) {
 
-    // Alerta nativa de confirmación para no borrar la carta por error
+    // Control de la alerta interactiva animada
+    const [alertaEliminar, setAlertaEliminar] = useState<{
+        visible: boolean;
+        id: string;
+        nombre: string;
+    }>({
+        visible: false,
+        id: '',
+        nombre: '',
+    });
+
     const confirmarEliminacion = (id: string, nombre: string) => {
-        Alert.alert(
-            `Eliminar carta`,
-            `¿Estas seguro de que quieres eliminar ${nombre}?`,
-            [
-                {
-                    text: 'Cancelar',
-                    style: 'cancel',
-                },
-                {
-                    text: 'Eliminar',
-                    onPress: () => alEliminarCarta(id),
-                },
-            ]
-        );
-    }
+        setAlertaEliminar({
+            visible: true,
+            id,
+            nombre,
+        });
+    };
 
 
     return (
@@ -127,6 +130,26 @@ export default function CartScreen({ carrito, alEliminarCarta, alCambiarCantidad
                     ))}
                 </ScrollView>
             )}
+
+            {/* Alerta animada interactiva con confirmación */}
+            <CustomAlert
+                visible={alertaEliminar.visible}
+                tipo="peligro"
+                titulo="Eliminar carta"
+                mensaje={`¿Estás seguro de que quieres eliminar ${alertaEliminar.nombre} del carrito?`}
+                alCerrar={() => setAlertaEliminar({ visible: false, id: '', nombre: '' })}
+                botones={[
+                    {
+                        texto: 'Cancelar',
+                        estilo: 'cancelar',
+                    },
+                    {
+                        texto: 'Eliminar',
+                        estilo: 'peligro',
+                        onPress: () => alEliminarCarta(alertaEliminar.id),
+                    },
+                ]}
+            />
         </View>
     );
 

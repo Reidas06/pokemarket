@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Pressable, ScrollView, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 import Icon from '@expo/vector-icons/Ionicons';
+import CustomAlert from '../components/CustomAlert';
 import { supabase } from '../src/services/supabase';
 
 export default function AccountScreen() {
@@ -10,6 +11,35 @@ export default function AccountScreen() {
 
     // Indica si hay una operación en curso con Supabase
     const [cargando, setCargando] = useState(false);
+
+    // Estado para la alerta animada interactiva
+    const [alerta, setAlerta] = useState<{
+        visible: boolean;
+        tipo: 'exito' | 'error' | 'peligro' | 'info';
+        titulo: string;
+        mensaje: string;
+        onAceptar?: () => void;
+    }>({
+        visible: false,
+        tipo: 'info',
+        titulo: '',
+        mensaje: '',
+    });
+
+    const mostrarAlerta = (
+        titulo: string,
+        mensaje: string,
+        tipo: 'exito' | 'error' | 'peligro' | 'info' = 'info',
+        onAceptar?: () => void
+    ) => {
+        setAlerta({
+            visible: true,
+            tipo,
+            titulo,
+            mensaje,
+            onAceptar,
+        });
+    };
 
     // Checkboxes 
     const [aceptaCondiciones, setAceptaCondiciones] = useState(false);
@@ -132,15 +162,16 @@ export default function AccountScreen() {
             if (error.message.includes('already registered') || error.message.includes('already exists')) {
                 setErrores(prev => ({ ...prev, correo: 'Este correo ya está registrado.' }));
             } else {
-                Alert.alert('Error al registrarse', error.message);
+                mostrarAlerta('Error al registrarse', error.message, 'error');
             }
             return;
         }
 
-        Alert.alert(
+        mostrarAlerta(
             '¡Cuenta creada!',
             'Revisa tu correo electrónico para confirmar tu cuenta.',
-            [{ text: 'Aceptar', onPress: () => setModoRegistro(false) }]
+            'exito',
+            () => setModoRegistro(false)
         );
     };
 
@@ -214,7 +245,7 @@ export default function AccountScreen() {
             return;
         }
 
-        Alert.alert('¡Bienvenido!', 'Has iniciado sesión correctamente.');
+        mostrarAlerta('¡Bienvenido!', 'Has iniciado sesión correctamente.', 'exito');
     };
 
     // LIMPIEZA
@@ -449,6 +480,21 @@ export default function AccountScreen() {
                     )}
                 </View>
             </ScrollView>
+
+            {/* Alerta animada interactiva */}
+            <CustomAlert
+                visible={alerta.visible}
+                tipo={alerta.tipo}
+                titulo={alerta.titulo}
+                mensaje={alerta.mensaje}
+                alCerrar={() => {
+                    const onAceptarCallback = alerta.onAceptar;
+                    setAlerta(prev => ({ ...prev, visible: false, onAceptar: undefined }));
+                    if (onAceptarCallback) {
+                        onAceptarCallback();
+                    }
+                }}
+            />
         </View>
     );
 }
